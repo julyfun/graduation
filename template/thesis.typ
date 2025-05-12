@@ -21,22 +21,22 @@
   achievement,
   summary-en,
 ) = documentclass(
-  doctype: "master", // 文档类型: "master" | "doctor" | "bachelor"
-  date: datetime(year: 2024, month: 11, day: 11), // 日期，如果需要显示今天的日期，可以使用 datetime.today() 函数
+  doctype: "bachelor", // 文档类型: "master" | "doctor" | "bachelor"
+  date: datetime(year: 2025, month: 6, day: 1), // 日期，如果需要显示今天的日期，可以使用 datetime.today() 函数
   twoside: false, // 双面模式
   anonymous: false, // 盲审模式
   info: (
-    student_id: "520XXXXXXXX",
-    name: "张三",
-    name_en: "Zhang San",
-    degree: "工学硕士",
-    supervisor: "李四教授",
-    supervisor_en: "Prof. Li Si",
-    title: "上海交通大学学位论文格式模板",
-    title_en: "DISSERTATION TEMPLATE FOR MASTER DEGREE OF ENGINEERING IN SHANGHAI JIAO TONG UNIVERSITY",
-    school: "某某学院",
-    school_en: "School of XXXXXXX",
-    major: "某某专业",
+    student_id: "521260910018",
+    name: "方俊杰",
+    name_en: "Fang Junjie",
+    degree: "学士",
+    supervisor: "卢策吾",
+    supervisor_en: "Prof. Lu Cewu",
+    title: "基于优化的快速、高自由度的机器人运动生成方法",
+    title_en: "FAST, HIGH-DEGREE-OF-FREEDOM ROBOTIC MOTION GENERATION METHOD BASED ON OPTIMIZATION",
+    school: "巴黎卓越工程师学院",
+    school_en: "SJTU Paris Elite Institute of Technology",
+    major: "信息工程",
   ),
 )
 
@@ -80,19 +80,23 @@
 
 == 引言
 
-学位论文......
+近年来，机器人在运动控制、导航、仓储物流和确定性装配任务等领域取得了突破性进展。现今落地的工业机器人通常依赖大量的手工编码，以执行简单、高度重复的任务。为了解决机器人仍无法执行人类级别灵巧任务的问题，研究者们提出了模仿学习 (Imitation Learning) 和强化学习 (Reinforcement Learning) 等方法来训练机器人操作策略 (Manipulation Policy)。目前已有许多工作能在任意抓取-放置（Pick-and-Place）等简单的灵巧任务上拥有出色的成功率，其中基于视觉-语言-动作 (VLA） 基础模型的策略则在折叠任意衣物、冲泡咖啡等需要自适应能力的任务上取得了显著的进步。
 
-=== 三级标题
+然而，操作任务的策略训练仍然存在许多挑战，包括高质量数据的缺乏和数据收集的高难度。现有的机器人模仿学习方法通常依赖于大量的高质量数据来训练操作策略，研究者们需要使用遥操作等方法来采集现实世界中的数据，这一过程通常使用主从臂架、示教器控制或 VR 头显等高成本设备来实现，不仅会消耗较多的劳动和时间成本，还会带来一定的安全风险，如在遥操作过程中发生碰撞、超出工作空间的情况。
 
-......
 
-==== 四级标题
 
-......
+---
+
+遥操作可有效收集数据，可用于机器人模仿学习和强化学习@opentv。现有的遥操作系统大多依赖于特定机械臂，或者无法充分利用不同机械臂的冗余自由度。本项目面向现代策略学习框架，设计通用遥操作接口，可大幅降低遥操作系统在不同硬件间迁移的成本，设计的算法可使机器人臂手运动更平滑，提升收集数据和视觉策略模型或视觉语言策略模型 (VLA)训练的效率.
+
+现有的遥操作系统存在许多问题，主要包括延迟高、末端抖动大、易发生碰撞、难以扩展等。医学手术机器人等精细操作领域对机械臂末端执行器的末端抖动容忍度极低@Tremor，即生理性抖动也可能造成远程操作手术的失败；较高的延迟会导致远程操作者的操作反馈不及时，从而增加了操作者的操作难度和轨迹的连贯度；另外，大部分系统与一个特定的部署环境耦合，无法同时在虚拟环境和现实世界中运行，也难以进行传感器和机械臂硬件的迁移。
 
 == 本文研究主要内容
 
-本文......
+为应对和上述挑战。
+
+Robot Data Scailing Law
 
 == 本文研究意义
 
@@ -106,9 +110,7 @@
 
 == 论文正文
 
-论文正文是主体，一般由标题、文字叙述、图、表格和公式等部分构成 @liu_survey_2024。一般可包括理论分析、计算方法、实验装置和测试方法，经过整理加工的实验结果分析和讨论，与理论计算结果的比较以及本研究方法与已有研究方法的比较等，因学科性质不同可有所变化。
 
-论文内容一般应由十个主要部分组成，依次为：1. 封面，2. 中文摘要，3. 英文摘要，4. 目录，5. 符号说明，6. 论文正文，7. 参考文献，8. 附录，9. 致谢，10. 攻读学位期间发表的学术论文目录@wang_overview_2025。
 
 以上各部分独立为一部分，每部分应从新的一页开始，且纸质论文应装订在论文的右侧。
 
@@ -237,7 +239,7 @@ $ 1 / mu nabla^2 Alpha - j omega sigma Alpha - nabla(1 / mu) times (nabla times 
 
 // 参考文献
 #bib(
-  bibfunc: bibliography.with("ref.bib"),
+  bibfunc: bibliography.with("ref.yaml"),
   full: false,
 )// full: false 表示只显示已引用的文献，不显示未引用的文献；true 表示显示所有文献
 
