@@ -191,3 +191,18 @@ black2024pi0visionlanguageactionflowmodel:
   url: https://arxiv.org/abs/2410.24164
   serial-number:
     arxiv: '2410.24164'
+ze20243ddiffusionpolicygeneralizable:
+  type: misc
+  title: '3D Diffusion Policy: Generalizable Visuomotor Policy Learning via Simple 3D Representations'
+  author:
+  - Ze, Yanjie
+  - Zhang, Gu
+  - Zhang, Kangning
+  - Hu, Chenyuan
+  - Wang, Muhan
+  - Xu, Huazhe
+  date: 2024
+  url: https://arxiv.org/abs/2403.03954
+  serial-number:
+    arxiv: '2403.03954'
+
