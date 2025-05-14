@@ -206,3 +206,29 @@ ze20243ddiffusionpolicygeneralizable:
   serial-number:
     arxiv: '2403.03954'
 
+pei2019elementaryintroductionkalmanfiltering:
+  type: misc
+  title: An Elementary Introduction to Kalman Filtering
+  author:
+  - Pei, Yan
+  - Biswas, Swarnendu
+  - Fussell, Donald S.
+  - Pingali, Keshav
+  date: 2019
+  url: https://arxiv.org/abs/1710.04055
+  serial-number:
+    arxiv: '1710.04055'
+
+kdl:
+  type: article
+  title: ({PDF}) Implementation of {KDL} Inverse Kinematics Routine on the Atlas Humanoid Robot
+  url:
+    value: https://www.researchgate.net/publication/275721047_Implementation_of_KDL_Inverse_Kinematics_Routine_on_the_Atlas_Humanoid_Robot
+    date: 2025-05-14
+  serial-number:
+    doi: 10.1016/j.procs.2015.02.063
+  abstract: '{PDF} {|} In this work, we describe the implementation of an inverse kinematics ({IK}) routine, from the open-source Kinematics and Dynamics library, on the... {|} Find, read and cite all the research you need on {ResearchGate}'
+  parent:
+    type: periodical
+    title: '{ResearchGate}'
+
