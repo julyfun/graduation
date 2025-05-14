@@ -84,6 +84,8 @@
   $upright(bold(it))$
 }
 
+#show raw: set text(12pt)
+
 #show: mainmatter
 
 = 绪论
@@ -568,25 +570,49 @@ algo(
 
 === 评价指标
 
-我们设计了 3 个操作任务，通过遥操作方法来评价轨迹生成模块的性能: `画圆`、`抓取胶圈`、`折叠毛巾`。在画圆中，机器人末端执行器上固定了画笔，并需要在固定的 A4 大小笔记本上画一个半径 10 厘米的圆圈。这项任务需要非常精确的执行轨迹，尤其在高度方向上，错误的轨迹可能让笔尖远离绘制平面，或者破坏纸张。在抓取胶圈中，机器人需要将一个胶圈从桌面上拿起，并放置到另一边，保持胶圈其中一面朝上。折叠毛巾任务则要求机器人将桌面上已经折叠过两次、方向随机摆放的毛巾折叠第三次。所有任务的图像如 [todo] 所示：
 
+我们设计了 3 个操作任务，通过遥操作方法来评价轨迹生成模块的性能: `画圆`、`抓取胶圈`、`折叠毛巾`。在画圆中，机器人末端执行器上固定了画笔，并需要在固定的 A4 大小笔记本上画一个半径 8 厘米的圆圈。这项任务需要非常精确的执行轨迹，尤其在高度方向上，错误的轨迹可能让笔尖远离绘制平面，或者破坏纸张，任务成功的标准是绘制轨迹首尾相接且没有间断。在抓取胶圈中，机器人需要将一个胶圈从桌面上拿起，并放置到另一边，保持胶圈其中一面朝上。折叠毛巾任务则要求机器人将桌面上已经折叠过两次、方向随机摆放的毛巾折叠第三次。所有任务的参考图像如@task-example 所示：
 
 #figure(
-table(
-  columns: (0.5fr, 1fr, 1fr, 1fr, 1fr),
+  grid(
+    columns: (1fr, 1fr, 1fr),
+    rows: auto,
+    gutter: 3pt,
+    grid.cell(image("figures/task0.jpg", width: 100%)),
+    grid.cell(image("figures/task1.jpg", width: 100%)),
+    grid.cell(image("figures/task2.jpg", width: 100%)),
+  ),
+  caption: "操作任务示例",
+  supplement: [图],
+) <task-example>
+
+其中，我们设定任务的得分标准为:
+
+$
+  "得分" = "成功率" times 100 dot min("目标半径" / "平均半径", space "平均半径" / "目标半径")
+$
+
+#figure(
+  caption: [实验结果],
+)[
+#show table.cell: set text(9pt)
+#show raw: set text(9pt)
+
+#table(
+  columns: (1.2fr, 1.2fr, 1fr, 1fr, 1fr, 1fr, 1fr),
   align: center + horizon,
   inset: (y: 0.8em),
   stroke: (_, y) => if y > 0 { (top: 0.8pt) },
-  table.header[][方法][][][],
-  [#rotate(-90deg)[VIVE Tracker\ Aubo i5]], [KDL-Tree 线性插值\ Moveit2 + TRAC-IK\ 本文方法 (Robotoy-lib)], [1\ 2\ 3\ ], [末端稳定，执行安全，碰撞规避，快速跟踪],
-  [#set text(size: 10pt); #rotate(
+
+  table.header[][方法][执行延迟 (ms)][`画圆`得分][`画圆`时间 (s)][`抓取胶圈`时间 (s)][`折叠毛巾`时间 (s)],
+
+  [#rotate(-90deg)[VIVE Tracker\ Aubo i5]], [_KDL-Tree_\ _Moveit2_ \ _本文方法_], [(执行失败)\ $262 plus.minus 55$\ $bold(105 plus.minus 39)$], [/\ *46.7*\ 38.1], [/\ $15.2 plus.minus 4.5$ \ $bold(14.4 plus.minus 2.5)$], [/\ $9.8 plus.minus 2.9$ \ $bold(8.3 plus.minus 2.3)$], [/\ $18.8 plus.minus 6.5$ \ $bold(18.1 plus.minus 7.9)$],
+  [#rotate(
   -90deg)[Quest 3\ UR10e-\ Shadowhand]],
-  [], [单/多传感器-双臂], [稳定延迟，多臂安全，高扩展性],
-  [],
-  [本文方法 (Robotoy-lib)], 
-),
-caption: [实验结果],
+  [_KDL-Tree_\ _Moveit2_ \ _本文方法_], [$bold(164 plus.minus 70)$\ $301 plus.minus 56$ \ $197 plus.minus 50$], [$4.1$ \ $7.4$ \ $bold(13.2)$], [$17.8 plus.minus 6.3$\ $18.0 plus.minus 6.4$\ $bold(17.4 plus.minus 6.7)$], [$10.64 plus.minus 2.0$ \ $11.7 plus.minus 3.0$\ $bold(9.9 plus.minus 3.1)$],
+  [$17.3 plus.minus 5.6$ \ $23.1 plus.minus 4.4$\ $bold(16.7 plus.minus 7.1)$], 
 )
+]
 
 
 == 结果分析
