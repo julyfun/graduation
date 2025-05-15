@@ -2,3 +2,4 @@
 *.pdf
 test/*
 /assets/**/*.jpg
+*.pptx

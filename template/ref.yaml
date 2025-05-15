@@ -232,3 +232,64 @@ kdl:
     type: periodical
     title: '{ResearchGate}'
 
+kaplan2020scalinglawsneurallanguage:
+  type: misc
+  title: Scaling Laws for Neural Language Models
+  author:
+  - Kaplan, Jared
+  - McCandlish, Sam
+  - Henighan, Tom
+  - Brown, Tom B.
+  - Chess, Benjamin
+  - Child, Rewon
+  - Gray, Scott
+  - Radford, Alec
+  - Wu, Jeffrey
+  - Amodei, Dario
+  date: 2020
+  url: https://arxiv.org/abs/2001.08361
+  serial-number:
+    arxiv: '2001.08361'
+
+bahl2022humantorobotimitationwild:
+  type: misc
+  title: Human-to-Robot Imitation in the Wild
+  author:
+  - Bahl, Shikhar
+  - Gupta, Abhinav
+  - Pathak, Deepak
+  date: 2022
+  url: https://arxiv.org/abs/2207.09450
+  serial-number:
+    arxiv: '2207.09450'
+
+liu2025rdt1bdiffusionfoundationmodel:
+  type: misc
+  title: 'RDT-1B: a Diffusion Foundation Model for Bimanual Manipulation'
+  author:
+  - Liu, Songming
+  - Wu, Lingxuan
+  - Li, Bangguo
+  - Tan, Hengkai
+  - Chen, Huayu
+  - Wang, Zhengyi
+  - Xu, Ke
+  - Su, Hang
+  - Zhu, Jun
+  date: 2025
+  url: https://arxiv.org/abs/2410.07864
+  serial-number:
+    arxiv: '2410.07864'
+
+zhao2023learningfinegrainedbimanualmanipulation:
+  type: misc
+  title: Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware
+  author:
+  - Zhao, Tony Z.
+  - Kumar, Vikash
+  - Levine, Sergey
+  - Finn, Chelsea
+  date: 2023
+  url: https://arxiv.org/abs/2304.13705
+  serial-number:
+    arxiv: '2304.13705'
