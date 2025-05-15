@@ -293,3 +293,15 @@ zhao2023learningfinegrainedbimanualmanipulation:
   url: https://arxiv.org/abs/2304.13705
   serial-number:
     arxiv: '2304.13705'
+
+ke20243ddiffuseractorpolicy:
+  type: misc
+  title: '3D Diffuser Actor: Policy Diffusion with 3D Scene Representations'
+  author:
+  - Ke, Tsung-Wei
+  - Gkanatsios, Nikolaos
+  - Fragkiadaki, Katerina
+  date: 2024
+  url: https://arxiv.org/abs/2402.10885
+  serial-number:
+    arxiv: '2402.10885'

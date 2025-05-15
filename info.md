@@ -17,3 +17,5 @@
 ## policy interface
 
 ## 观察发现.. (UMI-like)
+
+https://www.remove.bg/zh/upload
