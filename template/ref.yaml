@@ -305,3 +305,501 @@ ke20243ddiffuseractorpolicy:
   url: https://arxiv.org/abs/2402.10885
   serial-number:
     arxiv: '2402.10885'
+
+lin2025datascalinglawsimitation:
+  type: misc
+  title: Data Scaling Laws in Imitation Learning for Robotic Manipulation
+  author:
+  - Lin, Fanqi
+  - Hu, Yingdong
+  - Sheng, Pingyue
+  - Wen, Chuan
+  - You, Jiacheng
+  - Gao, Yang
+  date: 2025
+  url: https://arxiv.org/abs/2410.18647
+  serial-number:
+    arxiv: '2410.18647'
+
+embodimentcollaboration2025openxembodimentroboticlearning:
+  type: misc
+  title: 'Open X-Embodiment: Robotic Learning Datasets and RT-X Models'
+  author:
+  - Collaboration, Embodiment
+  - O'Neill, Abby
+  - Rehman, Abdul
+  - Gupta, Abhinav
+  - Maddukuri, Abhiram
+  - Gupta, Abhishek
+  - Padalkar, Abhishek
+  - Lee, Abraham
+  - Pooley, Acorn
+  - Gupta, Agrim
+  - Mandlekar, Ajay
+  - Jain, Ajinkya
+  - Tung, Albert
+  - Bewley, Alex
+  - Herzog, Alex
+  - Irpan, Alex
+  - Khazatsky, Alexander
+  - Rai, Anant
+  - Gupta, Anchit
+  - Wang, Andrew
+  - Kolobov, Andrey
+  - Singh, Anikait
+  - Garg, Animesh
+  - Kembhavi, Aniruddha
+  - Xie, Annie
+  - Brohan, Anthony
+  - Raffin, Antonin
+  - Sharma, Archit
+  - Yavary, Arefeh
+  - Jain, Arhan
+  - Balakrishna, Ashwin
+  - Wahid, Ayzaan
+  - Burgess-Limerick, Ben
+  - Kim, Beomjoon
+  - Schölkopf, Bernhard
+  - Wulfe, Blake
+  - Ichter, Brian
+  - Lu, Cewu
+  - Xu, Charles
+  - Le, Charlotte
+  - Finn, Chelsea
+  - Wang, Chen
+  - Xu, Chenfeng
+  - Chi, Cheng
+  - Huang, Chenguang
+  - Chan, Christine
+  - Agia, Christopher
+  - Pan, Chuer
+  - Fu, Chuyuan
+  - Devin, Coline
+  - Xu, Danfei
+  - Morton, Daniel
+  - Driess, Danny
+  - Chen, Daphne
+  - Pathak, Deepak
+  - Shah, Dhruv
+  - Büchler, Dieter
+  - Jayaraman, Dinesh
+  - Kalashnikov, Dmitry
+  - Sadigh, Dorsa
+  - Johns, Edward
+  - Foster, Ethan
+  - Liu, Fangchen
+  - Ceola, Federico
+  - Xia, Fei
+  - Zhao, Feiyu
+  - Frujeri, Felipe Vieira
+  - Stulp, Freek
+  - Zhou, Gaoyue
+  - Sukhatme, Gaurav S.
+  - Salhotra, Gautam
+  - Yan, Ge
+  - Feng, Gilbert
+  - Schiavi, Giulio
+  - Berseth, Glen
+  - Kahn, Gregory
+  - Yang, Guangwen
+  - Wang, Guanzhi
+  - Su, Hao
+  - Fang, Hao-Shu
+  - Shi, Haochen
+  - Bao, Henghui
+  - Amor, Heni Ben
+  - Christensen, Henrik I
+  - Furuta, Hiroki
+  - Bharadhwaj, Homanga
+  - Walke, Homer
+  - Fang, Hongjie
+  - Ha, Huy
+  - Mordatch, Igor
+  - Radosavovic, Ilija
+  - Leal, Isabel
+  - Liang, Jacky
+  - Abou-Chakra, Jad
+  - Kim, Jaehyung
+  - Drake, Jaimyn
+  - Peters, Jan
+  - Schneider, Jan
+  - Hsu, Jasmine
+  - Vakil, Jay
+  - Bohg, Jeannette
+  - Bingham, Jeffrey
+  - Wu, Jeffrey
+  - Gao, Jensen
+  - Hu, Jiaheng
+  - Wu, Jiajun
+  - Wu, Jialin
+  - Sun, Jiankai
+  - Luo, Jianlan
+  - Gu, Jiayuan
+  - Tan, Jie
+  - Oh, Jihoon
+  - Wu, Jimmy
+  - Lu, Jingpei
+  - Yang, Jingyun
+  - Malik, Jitendra
+  - Silvério, João
+  - Hejna, Joey
+  - Booher, Jonathan
+  - Tompson, Jonathan
+  - Yang, Jonathan
+  - Salvador, Jordi
+  - Lim, Joseph J.
+  - Han, Junhyek
+  - Wang, Kaiyuan
+  - Rao, Kanishka
+  - Pertsch, Karl
+  - Hausman, Karol
+  - Go, Keegan
+  - Gopalakrishnan, Keerthana
+  - Goldberg, Ken
+  - Byrne, Kendra
+  - Oslund, Kenneth
+  - Kawaharazuka, Kento
+  - Black, Kevin
+  - Lin, Kevin
+  - Zhang, Kevin
+  - Ehsani, Kiana
+  - Lekkala, Kiran
+  - Ellis, Kirsty
+  - Rana, Krishan
+  - Srinivasan, Krishnan
+  - Fang, Kuan
+  - Singh, Kunal Pratap
+  - Zeng, Kuo-Hao
+  - Hatch, Kyle
+  - Hsu, Kyle
+  - Itti, Laurent
+  - Chen, Lawrence Yunliang
+  - Pinto, Lerrel
+  - Fei-Fei, Li
+  - Tan, Liam
+  - name: Fan
+    given-name: Linxi
+    prefix: '"Jim"'
+  - Ott, Lionel
+  - Lee, Lisa
+  - Weihs, Luca
+  - Chen, Magnum
+  - Lepert, Marion
+  - Memmel, Marius
+  - Tomizuka, Masayoshi
+  - Itkina, Masha
+  - Castro, Mateo Guaman
+  - Spero, Max
+  - Du, Maximilian
+  - Ahn, Michael
+  - Yip, Michael C.
+  - Zhang, Mingtong
+  - Ding, Mingyu
+  - Heo, Minho
+  - Srirama, Mohan Kumar
+  - Sharma, Mohit
+  - Kim, Moo Jin
+  - Irshad, Muhammad Zubair
+  - Kanazawa, Naoaki
+  - Hansen, Nicklas
+  - Heess, Nicolas
+  - Joshi, Nikhil J
+  - Suenderhauf, Niko
+  - Liu, Ning
+  - Palo, Norman Di
+  - Shafiullah, Nur Muhammad Mahi
+  - Mees, Oier
+  - Kroemer, Oliver
+  - Bastani, Osbert
+  - Sanketi, Pannag R
+  - name: Miller
+    given-name: Patrick
+    prefix: '"Tree"'
+  - Yin, Patrick
+  - Wohlhart, Paul
+  - Xu, Peng
+  - Fagan, Peter David
+  - Mitrano, Peter
+  - Sermanet, Pierre
+  - Abbeel, Pieter
+  - Sundaresan, Priya
+  - Chen, Qiuyu
+  - Vuong, Quan
+  - Rafailov, Rafael
+  - Tian, Ran
+  - Doshi, Ria
+  - Martín-Martín, Roberto
+  - Baijal, Rohan
+  - Scalise, Rosario
+  - Hendrix, Rose
+  - Lin, Roy
+  - Qian, Runjia
+  - Zhang, Ruohan
+  - Mendonca, Russell
+  - Shah, Rutav
+  - Hoque, Ryan
+  - Julian, Ryan
+  - Bustamante, Samuel
+  - Kirmani, Sean
+  - Levine, Sergey
+  - Lin, Shan
+  - Moore, Sherry
+  - Bahl, Shikhar
+  - Dass, Shivin
+  - Sonawani, Shubham
+  - Tulsiani, Shubham
+  - Song, Shuran
+  - Xu, Sichun
+  - Haldar, Siddhant
+  - Karamcheti, Siddharth
+  - Adebola, Simeon
+  - Guist, Simon
+  - Nasiriany, Soroush
+  - Schaal, Stefan
+  - Welker, Stefan
+  - Tian, Stephen
+  - Ramamoorthy, Subramanian
+  - Dasari, Sudeep
+  - Belkhale, Suneel
+  - Park, Sungjae
+  - Nair, Suraj
+  - Mirchandani, Suvir
+  - Osa, Takayuki
+  - Gupta, Tanmay
+  - Harada, Tatsuya
+  - Matsushima, Tatsuya
+  - Xiao, Ted
+  - Kollar, Thomas
+  - Yu, Tianhe
+  - Ding, Tianli
+  - Davchev, Todor
+  - Zhao, Tony Z.
+  - Armstrong, Travis
+  - Darrell, Trevor
+  - Chung, Trinity
+  - Jain, Vidhi
+  - Kumar, Vikash
+  - Vanhoucke, Vincent
+  - Guizilini, Vitor
+  - Zhan, Wei
+  - Zhou, Wenxuan
+  - Burgard, Wolfram
+  - Chen, Xi
+  - Chen, Xiangyu
+  - Wang, Xiaolong
+  - Zhu, Xinghao
+  - Geng, Xinyang
+  - Liu, Xiyuan
+  - Liangwei, Xu
+  - Li, Xuanlin
+  - Pang, Yansong
+  - Lu, Yao
+  - Ma, Yecheng Jason
+  - Kim, Yejin
+  - Chebotar, Yevgen
+  - Zhou, Yifan
+  - Zhu, Yifeng
+  - Wu, Yilin
+  - Xu, Ying
+  - Wang, Yixuan
+  - Bisk, Yonatan
+  - Dou, Yongqiang
+  - Cho, Yoonyoung
+  - Lee, Youngwoon
+  - Cui, Yuchen
+  - Cao, Yue
+  - Wu, Yueh-Hua
+  - Tang, Yujin
+  - Zhu, Yuke
+  - Zhang, Yunchu
+  - Jiang, Yunfan
+  - Li, Yunshuang
+  - Li, Yunzhu
+  - Iwasawa, Yusuke
+  - Matsuo, Yutaka
+  - Ma, Zehan
+  - Xu, Zhuo
+  - Cui, Zichen Jeff
+  - Zhang, Zichen
+  - Fu, Zipeng
+  - Lin, Zipeng
+  date: 2025
+  url: https://arxiv.org/abs/2310.08864
+  serial-number:
+    arxiv: '2310.08864'
+
+octomodelteam2024octoopensourcegeneralistrobot:
+  type: misc
+  title: 'Octo: An Open-Source Generalist Robot Policy'
+  author:
+  - Team, Octo Model
+  - Ghosh, Dibya
+  - Walke, Homer
+  - Pertsch, Karl
+  - Black, Kevin
+  - Mees, Oier
+  - Dasari, Sudeep
+  - Hejna, Joey
+  - Kreiman, Tobias
+  - Xu, Charles
+  - Luo, Jianlan
+  - Tan, You Liang
+  - Chen, Lawrence Yunliang
+  - Sanketi, Pannag
+  - Vuong, Quan
+  - Xiao, Ted
+  - Sadigh, Dorsa
+  - Finn, Chelsea
+  - Levine, Sergey
+  date: 2024
+  url: https://arxiv.org/abs/2405.12213
+  serial-number:
+    arxiv: '2405.12213'
+
+majumdar2024searchartificialvisualcortex:
+  type: misc
+  title: Where are we in the search for an Artificial Visual Cortex for Embodied Intelligence?
+  author:
+  - Majumdar, Arjun
+  - Yadav, Karmesh
+  - Arnaud, Sergio
+  - Ma, Yecheng Jason
+  - Chen, Claire
+  - Silwal, Sneha
+  - Jain, Aryan
+  - Berges, Vincent-Pierre
+  - Abbeel, Pieter
+  - Malik, Jitendra
+  - Batra, Dhruv
+  - Lin, Yixin
+  - Maksymets, Oleksandr
+  - Rajeswaran, Aravind
+  - Meier, Franziska
+  date: 2024
+  url: https://arxiv.org/abs/2303.18240
+  serial-number:
+    arxiv: '2303.18240'
+
+brohan2023rt2visionlanguageactionmodelstransfer:
+  type: misc
+  title: 'RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control'
+  author:
+  - Brohan, Anthony
+  - Brown, Noah
+  - Carbajal, Justice
+  - Chebotar, Yevgen
+  - Chen, Xi
+  - Choromanski, Krzysztof
+  - Ding, Tianli
+  - Driess, Danny
+  - Dubey, Avinava
+  - Finn, Chelsea
+  - Florence, Pete
+  - Fu, Chuyuan
+  - Arenas, Montse Gonzalez
+  - Gopalakrishnan, Keerthana
+  - Han, Kehang
+  - Hausman, Karol
+  - Herzog, Alexander
+  - Hsu, Jasmine
+  - Ichter, Brian
+  - Irpan, Alex
+  - Joshi, Nikhil
+  - Julian, Ryan
+  - Kalashnikov, Dmitry
+  - Kuang, Yuheng
+  - Leal, Isabel
+  - Lee, Lisa
+  - Lee, Tsang-Wei Edward
+  - Levine, Sergey
+  - Lu, Yao
+  - Michalewski, Henryk
+  - Mordatch, Igor
+  - Pertsch, Karl
+  - Rao, Kanishka
+  - Reymann, Krista
+  - Ryoo, Michael
+  - Salazar, Grecia
+  - Sanketi, Pannag
+  - Sermanet, Pierre
+  - Singh, Jaspiar
+  - Singh, Anikait
+  - Soricut, Radu
+  - Tran, Huong
+  - Vanhoucke, Vincent
+  - Vuong, Quan
+  - Wahid, Ayzaan
+  - Welker, Stefan
+  - Wohlhart, Paul
+  - Wu, Jialin
+  - Xia, Fei
+  - Xiao, Ted
+  - Xu, Peng
+  - Xu, Sichun
+  - Yu, Tianhe
+  - Zitkovich, Brianna
+  date: 2023
+  url: https://arxiv.org/abs/2307.15818
+  serial-number:
+    arxiv: '2307.15818'
+
+brohan2023rt1roboticstransformerrealworld:
+  type: misc
+  title: 'RT-1: Robotics Transformer for Real-World Control at Scale'
+  author:
+  - Brohan, Anthony
+  - Brown, Noah
+  - Carbajal, Justice
+  - Chebotar, Yevgen
+  - Dabis, Joseph
+  - Finn, Chelsea
+  - Gopalakrishnan, Keerthana
+  - Hausman, Karol
+  - Herzog, Alex
+  - Hsu, Jasmine
+  - Ibarz, Julian
+  - Ichter, Brian
+  - Irpan, Alex
+  - Jackson, Tomas
+  - Jesmonth, Sally
+  - Joshi, Nikhil J
+  - Julian, Ryan
+  - Kalashnikov, Dmitry
+  - Kuang, Yuheng
+  - Leal, Isabel
+  - Lee, Kuang-Huei
+  - Levine, Sergey
+  - Lu, Yao
+  - Malla, Utsav
+  - Manjunath, Deeksha
+  - Mordatch, Igor
+  - Nachum, Ofir
+  - Parada, Carolina
+  - Peralta, Jodilyn
+  - Perez, Emily
+  - Pertsch, Karl
+  - Quiambao, Jornell
+  - Rao, Kanishka
+  - Ryoo, Michael
+  - Salazar, Grecia
+  - Sanketi, Pannag
+  - Sayed, Kevin
+  - Singh, Jaspiar
+  - Sontakke, Sumedh
+  - Stone, Austin
+  - Tan, Clayton
+  - Tran, Huong
+  - Vanhoucke, Vincent
+  - Vega, Steve
+  - Vuong, Quan
+  - Xia, Fei
+  - Xiao, Ted
+  - Xu, Peng
+  - Xu, Sichun
+  - Yu, Tianhe
+  - Zitkovich, Brianna
+  date: 2023
+  url: https://arxiv.org/abs/2212.06817
+  serial-number:
+    arxiv: '2212.06817'
+

@@ -55,21 +55,17 @@
 
 #abstract(
   keywords: (
-    "学位论文",
-    "论文格式",
-    "规范化",
-    "模板",
+    "数据采集",
+    "扩散策略",
+    "多模态动作",
+    "运动生成",
   ),
 )[
-  学位论文是研究生从事科研工作的成果的主要表现，集中表明了作者在研究工作中获得的新的发明、理论或见解，是研究生申请硕士或博士学位的重要依据，也是科研领域中的重要文献资料和社会的宝贵财富。
-
-  为了提高研究生学位论文的质量，做到学位论文在内容和格式上的规范化与统一化，特制作本模板。
+针对当前机器人操作（Manipulation）领域中大规模高质量数据采集困难的痛点，我们实现了一种结合多目标优化与在线插值的运动生成算法，实验表明，该算法使得各种机械臂在数据收集和推理阶段的运动更灵活和流畅，尤其对于高自由度机械臂。第二阶段，我们开发了一套基于移动设备的低成本、高效率数据采集系统，通过集成AR定位、鱼眼相机和扩展件设计，实现了毫米级精度的执行器姿态录制以及显著的采集提速。为验证采集数据的有效性，我们改进的Chunked Diffusion Policy策略模型提升了观测的表示能力和策略执行的平滑程度。研究结果表明，这套新的数据收集系统能够降低机器人操作数据采集的门槛，为规模化数据采集和预训练策略提供了可行路径。
 ]
 
-#abstract-en(keywords: ("dissertation", "dissertation format", "standardization", "template"))[
-  As a primary means of demonstrating research findings for postgraduate students, dissertation is a systematic and standardized record of the new inventions, theories or insights obtained by the author in the research work. It can not only function as an important reference when students pursue further studies, but also contribute to scientific research and social development.
-
-  This template is therefore made to improve the quality of postgraduates' dissertations and to further standardize it both in content and in format.
+#abstract-en(keywords: ("Data collection", "Diffusion Policy", "Multimodal actions", "Motion generation"))[
+We developed a low-cost, high-efficiency data collection system based on mobile devices. We  first designed a motion generation algorithm combining multi-objective optimization with online interpolation. Experiments demonstrate that this algorithm enables more flexible and smoother motion for various robotic arms during both data collection and inference. In the second stage, by integrating AR positioning, fisheye cameras, and an improved gripper design, our system achieves millimeter-level accuracy in end-effector pose capture while significantly accelerating data collection. The proposed Chunked Diffusion Policy model improves the modeling capability for multimodal actions. The results show that our hardware-software integrated system significantly reduces the barriers and costs of robot manipulation data collection, providing a feasible technical pathway toward advancing robotic dexterity to human-like levels.
 ]
 
 #outline()
@@ -84,6 +80,14 @@
   $upright(bold(it))$
 }
 
+#let box-img(img, width, radius) = {
+  box(
+    image(img, width: width),
+    radius: radius,
+    clip: true,
+  )
+}
+
 #show raw: set text(12pt, font: "Heiti SC")
 #show figure.caption: set text(10pt)
 
@@ -93,21 +97,21 @@
 
 == 引言
 
-近年来，机器人在运动控制、导航、仓储物流和确定性装配任务等领域取得了突破性进展。现今落地的工业机器人通常依赖大量的手工编码，以执行简单、高度重复的任务。为了解决机器人仍无法执行*人类级别*灵巧任务的问题，研究者们提出了模仿学习 (Imitation Learning) 和强化学习 (Reinforcement Learning) 等方法来训练机器人操作策略 (Manipulation Policy)。目前已有许多工作能在任意抓取-放置（Pick-and-Place）等简单的灵巧任务上拥有出色的成功率@ze20243ddiffusionpolicygeneralizable， 其中基于视觉-语言-动作 (VLA） 基础模型的策略则在折叠任意衣物、冲泡咖啡等需要自适应能力的任务上取得了显著的进步。
+近年来，机器人在运动控制、导航、仓储物流和确定性装配任务等领域取得了突破性进展。现今落地的工业机器人通常依赖大量的手工编码，以执行简单、高度重复的任务。为了解决机器人仍无法执行*人类级别*灵巧任务的问题，研究者们提出了模仿学习和强化学习等方法来训练机器人操作策略 (Manipulation Policy)。目前已有许多工作能在任意抓取-放置（Pick-and-Place）等简单的灵巧任务上拥有出色的成功率@ze20243ddiffusionpolicygeneralizable， 其中基于视觉-语言-动作 (VLA） 基础模型的策略则在折叠任意衣物、冲泡咖啡等需要自适应能力的任务上取得了显著的进步。
 
 然而，操作任务的策略训练仍然存在许多挑战，包括高质量数据的缺乏和数据收集的高难度。现有的机器人模仿学习方法通常依赖于大量的高质量人类演示 (Demonstration) 来训练操作策略，研究者们需要使用遥操作等方法来采集现实世界中的数据，这一过程通常使用主从臂架、示教器控制或 VR 头显等高成本设备来实现，不仅会消耗较多的劳动和时间成本，还会带来一定的安全风险，如在遥操作过程中发生碰撞、超出工作空间的情况。
 
-机器人的不同具身形态也为策略训练带来了挑战。执行操作的机器人通常具有高自由度的机械臂和末端执行器，而不同具身形态导致了不同的自由度、运动学约束和动力学约束，也可能具有不同模态的传感器和执行器。这不仅导致收集数据任务依赖于特定机械臂软件平台，还会导致数据集和策略模型在不同具身形态之间的迁移困难。事实上，操作任务 (Manipulation Task) 的动作往往是多模态的，即对于同一观测，人类可以采取不同的动作来完成任务。直接采用基于回归的监督学习可能导致不稳定的训练，因此，训练策略时应当选取能够建模多模态动作分布的模型。
+机器人的不同具身形态也为策略训练带来了挑战。执行操作的机器人通常具有高自由度的机械臂和末端执行器，而不同具身形态导致了不同的自由度、运动学约束和动力学约束，也可能具有不同模态的传感器和执行器。这不仅导致收集数据任务依赖于特定机械臂软件平台，还会导致数据集和策略模型在不同具身形态之间的迁移困难@embodimentcollaboration2025openxembodimentroboticlearning @octomodelteam2024octoopensourcegeneralistrobot。事实上，操作任务 (Manipulation Task) 的动作往往是多模态的@chi2024diffusionpolicyvisuomotorpolicy，即对于同一观测，人类可以采取不同的动作来完成任务。直接采用基于回归的监督学习可能导致不稳定的训练，因此，训练策略时应当选取能够建模多模态动作分布的模型。
 
 == 本文研究主要内容
 
-为应对和上述挑战，本研究的核心目标是设计并构建一个通用的演示数据收集系统，并探索合适的策略接口，旨在允许操作者在任意环境中收集高质量的演示数据，[todo] 并探索数据质量和数量对策略的影响，通过策略训练验证系统的有效性。本文的主要研究内容包括：
+为应对和上述挑战，本研究的核心目标是设计并构建一个通用的演示数据收集系统，并探索合适的策略接口，旨在允许操作者在任意环境中收集高质量的演示数据，并探索数据质量和数量对策略的影响，通过策略训练验证系统的有效性。本文的主要研究内容包括：
 
 - *设计通用的机器人运动生成方法：*设计并实现基于优化的机器人无碰撞运动方法和一种在线轨迹生成算法，旨在充分利用不同机械臂的自由度并降低对特定机械臂软件平台的依赖，提高机器人运动的流畅度和安全性，同时提升收集数据的效率和质量，为后续演示设备采集和策略部署奠定基础。
 - *设计易于使用和普及的演示接口：*探索合适的物理接口来收集人类演示数据，比较并选定低成本、普及率高的硬件设备来收集充分的视觉-姿态等信息来满足策略学习的需求，并设计易于使用的用户接口，目标是大幅降低操作者的使用门槛和学习成本，探索大规模数据收集的可能性。
 - *探索合适的策略模型接口：*比较和选取观测和动作空间的不同表示 (Representation)，使得策略模型能在少量数据微调 (Few-shot fine-tuning) 的条件下在不同具身形态上进行迁移，并验证上述设计的有效性。
 
-为实现上述目标，本文首先设计了一套可自定义优化目标的机器人运动学逆解方案，并提出了一种满足急动度约束的在线插值算法（章节三），可将夹爪或灵巧手动作指令转换为平滑的机械臂关节空间轨迹。在此基础上，本文在移动设备上开发了可用于收集动作数据或用于任意机械臂遥操作的软件接口，演示了软硬件系统可用于执行大量不同种类的操作任务，并有效提升了数据收集的效率。最后，本文在不同的具身形态上验证了所收集数据和策略接口的有效性，以及 [todo] 数据多样性和数量对策略的影响（章节四）。
+为实现上述目标，本文首先设计了一套可自定义优化目标的机器人运动学逆解方案，并提出了一种满足急动度约束的在线插值算法（章节三），可将夹爪或灵巧手动作指令转换为平滑的机械臂关节空间轨迹。在此基础上，本文在移动设备上开发了可用于收集动作数据或用于任意机械臂遥操作的软件接口，演示了软硬件系统可用于执行大量不同种类的操作任务，并有效提升了数据收集的效率。最后，本文在不同的具身形态上验证了所收集数据和策略接口的有效性，以及探索数据多样性和数量对策略的影响（章节四）。
 
 == 研究意义
 
@@ -116,33 +120,17 @@
 - 本文设计和实现的移动设备演示框架能以较低的学习使用成本推广到用户群体中，其集成的在线视觉定位识别和数据筛查算法能在降低数据后处理阶段的复杂性，有望为大规模数据收集提供一种易于普及的解决方案。
 - 本文通过收集大量数据并在视觉、动作表示上进行广泛分析，验证了数据集多样性相比数量对于策略泛化能力更为重要的结论，为后续策略模型优化和数据收集方向提供了参考。
 
-== 本章小结
-
-本章首先概述了机器人在运动控制、导航和确定性任务等领域的发展现状，指出当前工业机器人仍依赖大量手工编码，难以完成人类级别的灵巧操作任务。模仿学习和强化学习等方法的引入为策略训练提供了新的可能性，但高质量数据的稀缺、采集成本高昂以及机器人具身形态的多样性等问题，仍然制约着策略模型的泛化能力和实际应用。
-
-针对这些挑战，本研究提出构建一个通用的演示数据收集系统，并探索高效的策略接口，以降低数据采集门槛并提升策略迁移能力。具体而言，本研究聚焦于三个核心方向：（1）设计基于优化的机器人运动生成方法，提升运动平滑性和安全性；（2）开发低门槛、易普及的演示接口，降低操作者的学习成本；（3）探索适应多模态动作的策略表示，增强模型在少量数据下的迁移能力。
-
-本研究的贡献不仅在于提出了一套高效的遥操作与数据采集框架，还通过实验验证了数据多样性对策略性能的关键影响，为后续研究提供了重要参考。这些工作为机器人策略学习的高效数据收集、跨平台迁移及实际部署奠定了技术基础，对推动机器人灵巧操作的发展具有一定意义。
-
 = 相关工作
 
 == 多目标优化逆向运动学求解器
-RangedIK提出了一种创新的逆向运动学（IK）求解框架，通过将传统IK问题转化为多目标优化任务，实现了末端执行器位姿精度与运动可行性的平衡。该框架的核心创新在于：(1) 采用基于 Native 编译的高效优化引擎，快速同步处理关节限位、自碰撞检测、环境避障等约束条件；(2) 提出"松弛变量"机制，当理想位姿不可达时自动寻找最近似可行解，避免传统IK算法常见的无解困境；(3) 扩展开发的CollisionIK模块进一步支持动态障碍物避障，使机械臂能在复杂环境中生成连续平滑的运动轨迹。该系统在Baxter、UR5等主流机械臂平台上均能保持较高的实时求解频率。然而，RangedIK仅关注机械臂而并未考虑到手腕冗余自由度和灵巧手的运动规划，同时也不支持将不均匀的控制指令转换为频率稳定的关节空间轨迹。
+RangedIK提出了一种创新的逆向运动学（IK）求解框架@wang2023rangedikoptimizationbasedrobotmotion，将传统IK问题转化为多目标优化任务，平衡了末端执行器位姿精度与运动可行性。该框架有如下创新点 1）将关节限位、自碰撞检测、环境避障等约束条件同时纳入优化目标； (2) 提出"松弛变量"机制，当理想位姿不可达时自动寻找最近似可行解，避免传统IK算法常见的无解情况；(3) 扩展开发的CollisionIK模块进一步支持动态障碍物避障，使机械臂能在复杂环境中生成连续平滑的运动轨迹。该系统在Baxter、UR5等主流机械臂平台上均能保持较高的实时求解频率。然而，RangedIK仅关注机械臂而并未考虑到手腕冗余自由度和灵巧手的运动规划，同时也不支持将不均匀的控制指令转换为频率稳定的关节空间轨迹。
 
 == 基于扩散Transformer的大规模基础模型
 
-RDT-1B作为机器人操作扩散大模型（12亿参数），在46个数据集和数十万级轨迹的预训练基础上，通过ALOHA双手机器人的6000+专项数据微调，提升了机器人操作灵活性与泛化能力。其核心贡献在于：(1) 设计异构动作空间统一编码方法，支持从单臂到双手机器人的跨平台控制；(2) 实现多模态条件的精准对齐，在"倒水至1/3刻度"等未见指令上展现一定语义理解能力；(3) 达到300+动作/秒的实时推理速度，满足高速操作需求。特别值得关注的是，该模型仅需1-5次示范即可学习"擦拭"等新技能，且能处理训练中未出现的物体空间配置。该工作验证了大规模预训练模型在机器人操作中的潜力。
+受到最近在单手操作方面尝试的启发，研究团队推出了 RDT-1B作为机器人操作扩散大模型，在46个数据集和数十万级轨迹的预训练基础上，通过ALOHA双手机器人的专项数据微调，提升了机器人操作灵活性与泛化能力。其创新包括 1）为异构动作空间设计了一种统一编码方法，支持从单臂到双手机器人的跨平台控制；2）实现多模态条件的精准对齐，在未见的语言指令上展现一定语义理解能力；3）达到300+动作/秒的实时推理速度，满足高速操作需求。值得注意的是，该模型仅需1-5次示范即可学习简答的新技能，验证了大规模预训练模型在机器人操作中的潜力@liu2025rdt1bdiffusionfoundationmodel。
 
 == 基于手持式采集的通用操作接口
-UMI框架创新性地提出"手持夹爪+腕部相机"的轻量化数据采集方案，解决了传统示教方法在双手机器人动态操作任务中的数据获取难题。其技术突破包含三个关键设计：(1) 采用GoPro相机与平行夹爪集成的便携设备，支持野外环境下的高动态动作捕捉；(2) 提出相对轨迹动作表示方法，确保人类演示到机器人执行的零样本迁移；(3) 内置运动学约束验证模块，自动过滤不可行的示范数据。实验证明，仅通过改变训练数据，UMI即可支持双手机器人完成倒水、开盖等长周期精细操作。在咖啡杯操作任务中，训练后的扩散策略甚至能泛化至超出训练分布的场景（如将杯子放置于喷泉顶部）。这种"硬件无关"的策略学习范式，为复杂操作技能的快速部署提供了新思路。UMI 开源的硬件接口可用 3D 打印复现，但由于其依赖的 GoPro 相机、UR5e 机械臂等硬件价格昂贵，并缺乏在线数据筛选，导致数据收集工作仍需要雇佣受训练人员进行操作，而且数据筛查和后处理压力较大，难以规模化采集数据。
-
-== 本章小结
-
-近年来，机器人操作策略学习在运动规划、多模态感知和技能迁移等方面取得了显著进展。本章围绕逆向运动学求解、视觉语言策略框架和通用数据采集接口三个关键方向，梳理了相关工作的技术突破与现存挑战。
-
-在运动规划方面，RangedIK等优化求解器通过松弛约束和实时优化，显著提升了复杂环境下的轨迹生成能力，但针对灵巧手协同操作的高自由度的时序稳定运动生成仍缺乏有效解决方案。RDT、OpenVLA等视觉语言模型通过统一的多模态表示，展现了强大的跨任务泛化能力，验证了大规模数据预训练的可行性。UMI等轻量化采集方案为大规模数据获取提供了新范式，但如何平衡硬件普适性与动作精度仍待探索。
-
-综合现有研究可见，当前机器人操作系统的核心矛盾在于：高泛化能力的策略模型依赖于高质量、多样化的数据，而数据采集效率与质量又受限于硬件适配性、运动规划可靠性等底层技术。这一矛盾在双臂-灵巧手协同操作等复杂任务中尤为突出。为此，本研究将从以下方向突破：首先，开发融合优化求解与在线插值的运动生成框架，解决高自由度系统的实时控制问题；其次，设计跨平台的标准化策略接口，弥合仿真与现实间的语义鸿沟；最终，通过可扩展的数据采集系统，构建支持多任务迁移的演示数据库。这些研究将为推动机器人从单一技能向通用操作能力演进提供关键技术支撑。
+UMI框架提出"手持夹爪+腕部相机"的轻量化数据采集方案，以试图解决传统方法在单臂和双臂任务上的收集效率问题。@chi2024universalmanipulationinterfaceinthewild。其设计包括 1）采用GoPro相机与平行夹爪集成的便携设备，支持野外环境下的高动态动作捕捉；2）提出相对轨迹动作表示方法，提升人类演示数据到机器人执行迁移的可能性；3）运动学约束验证模块在后处理阶段过滤不可行的示范数据。这种"硬件无关"的收集范式为我们的数据采集提供了新思路。UMI 开源的硬件接口可用 3D 打印复现，但由于其依赖的 GoPro 相机、UR5e 机械臂等硬件价格昂贵，并缺乏在线数据筛选，导致数据收集工作仍需要雇佣受训练人员进行操作，而且数据筛查和后处理压力较大，难以规模化采集数据。
 
 = 基于实时优化的轨迹生成
 
@@ -154,17 +142,17 @@ UMI框架创新性地提出"手持夹爪+腕部相机"的轻量化数据采集�
 
 === MediaPipe Hands 手部检测器
 
-该检测器是一种基于 MediaPipe @zhang2020mediapipehandsondevicerealtime (用于构建跨平台机器学习解决方案) 的实时设备上的手部跟踪解决方案，该方案可以从单张的 RGB 图像中预测人体的手部骨架，并且可以用于 AR/VR 应用，且可以使用移动设备相机等通用图像采集设备，避免依赖深度传感器等昂贵设备。
+该检测器是一种基于 MediaPipe @zhang2020mediapipehandsondevicerealtime 模型的实时设备上的手部跟踪解决方案，可从单张 RGB 图像中预测人体的手部骨架，且可以使用移动设备相机等通用图像采集设备，部署方便，避免依赖深度传感器等昂贵设备。
 
 #figure(
   grid(
     columns: (1fr, 1fr, 1fr, 1fr),
     rows: auto,
     gutter: 3pt,
-    grid.cell(image("figures/hand1.jpg", width: 100%)),
-    grid.cell(image("figures/hand2.jpg", width: 100%)),
-    grid.cell(image("figures/hand3.jpg", width: 100%)),
-    grid.cell(image("figures/hand4.jpg", width: 100%)),
+    grid.cell(box-img("figures/hand1.png", 100%, 12pt)),
+    grid.cell(box-img("figures/hand2.png", 100%, 12pt)),
+    grid.cell(box-img("figures/hand3.png", 100%, 12pt)),
+    grid.cell(box-img("figures/hand4.png", 100%, 12pt)),
   ),
   caption: "MediaPipe Hands 手部检测器识别不同手势的效果",
   supplement: [图],
@@ -193,9 +181,8 @@ VIVE 追踪器作为一种高精度、低延迟的追踪设备，在第一阶段
 
 Quest 3 头显搭载多颗高分辨率红外摄像头，通过主动红外照明与立体视觉融合技术，实现手部轮廓与关节运动的实时捕捉。
 
-- 基于视觉模型的手势识别算法：采用机器学习训练模型对手部图像进行特征提取与关键点定位，无需外部追踪器，即可实现手部与手指 26 自由度（DoF）高精度追踪。
-- 低延迟图像处理单元：集成 Snapdragon XR2 Gen 2 处理器，支持高帧率图像采集与并行推理，确保手部追踪延迟低于 20ms，满足实时交互需求。
-- 环境适应性强：系统支持在不同光照条件（自然光、室内灯光）下稳定运行，适配无标记、无手套的裸手追踪环境。
+- 采用机器学习训练模型对手部图像进行特征提取与关键点定位，使之无需外部追踪器，即可实现手部与手指 26 自由度（DoF）高精度追踪。
+- 内置 Snapdragon XR2 Gen 2 处理器，支持高帧率图像采集与并行推理，保证手部追踪延迟在较低水平。
 
 #figure(
   image("figures/vr.jpg", width: 37%),
@@ -375,7 +362,7 @@ $
 - 控制低成本机械臂（如 Aubo 5i，Koch 等型号机械臂）或机械臂末端执行器惯量较大的情况。
 - 需要通过 TCP 透传等底层控制方式降低执行延迟的情况。
 
-为确保机械臂在空间中的运行轨迹正确恰当，多项式插值（Polynomial Interopolation）在工业中的应用十分常见，常用的几种多项式插值法有：线性法、拉格朗日插值法和牛顿插值法。现有方法通常指定少量的参考量，如轨迹上的极值点、起点和终点并给定期望到达时间，无法满足实时操作（如遥操作和策略部署）中高频率修改目标点和“尽快执行”的要求。对此，本文提出了一种能以任意不均匀频率修改轨迹目标点，并在满足同时速度、加速度和急动度约束条件下产生稳定频率轨迹的在线插值算法。
+为确保机械臂在空间中的运行轨迹正确恰当，插值法（Interopolation）在工业中的应用十分常见，现有方法包括线性插值、圆弧插值和多项式插值，通常指定少量的参考量，如轨迹上的极值点、起点和终点并给定期望到达时间，无法满足实时操作（如遥操作和策略部署）中高频率修改目标点和“尽快执行”的要求。对此，本文提出了一种能以任意不均匀频率修改轨迹目标点，并在满足同时速度、加速度和急动度约束条件下产生稳定频率轨迹的在线插值算法。
 
 给定当前机械臂任一关节的当前路点（Waypoint），我们的目标是在最短时间内以零速度和零加速度到达目标角度 $d$，其中最大速度 $v_m$，最大加速度 $a_m$，最大急动度 $j_m$ 为机械臂固有参数。若目标速度不为 $0$，可将算法中的初始速度减去目标速度来简化问题。这一过程可分为包含加速度增大、减小与保持的 7 个阶段，本文中我们不假定当前处于某一阶段，而是在计算过程中确定:
 
@@ -558,7 +545,7 @@ $
 
 == 实验设计
 
-本节针对上述提到的传感器通用接口、基于多目标优化的运动学逆解和在线插值轨迹生成模块进行了实机实验。实验所使用的参数可在本研究的开源实现中找到。我们将本文实现的模块与两种基线方案进行了对比：由 KDL 算法@kdl 和三次多项式插值实现的逆解和规划模块，以及使用 Moveit2 和 TRAC-IK 实现的基线方法。
+本节针对上述提到的传感器通用接口、基于多目标优化的运动学逆解和在线插值轨迹生成模块进行了实机实验。实验所使用的参数可在本研究的开源实现中找到。我们将本文实现的模块与两种基线方案进行了对比：由 KDL 算法@kdl 和三次多项式插值实现的逆解和规划模块，以及使用 MoveIt2 和 TRAC-IK 实现的基线方法。
 
 === 实现细节
 
@@ -607,7 +594,7 @@ $
     stroke: (_, y) => if y > 0 { (top: 0.8pt) },
     table.header[][方法][执行延迟 (ms)][`画圆`得分][`画圆`时间 (s)][`抓取胶圈`时间 (s)][`折叠毛巾`时间 (s)],
     [#rotate(-90deg)[VIVE Tracker\ Aubo i5]],
-    [_KDL-Tree_\ _Moveit2_ \ _本文方法_],
+    [_KDL-Tree_\ _MoveIt2_ \ _本文方法_],
     [(执行失败)\ $262 plus.minus 55$\ $bold(105 plus.minus 39)$],
     [/\ *46.7*\ 38.1],
     [/\ $15.2 plus.minus 4.5$ \ $bold(14.4 plus.minus 2.5)$],
@@ -615,7 +602,7 @@ $
     [/\ $18.8 plus.minus 6.5$ \ $bold(18.1 plus.minus 7.9)$],
 
     [#rotate(-90deg)[Quest 3\ UR10-\ ShadowHand]],
-    [_KDL-Tree_\ _Moveit2_ \ _本文方法_],
+    [_KDL-Tree_\ _MoveIt2_ \ _本文方法_],
     [$bold(164 plus.minus 70)$\ $301 plus.minus 56$ \ $197 plus.minus 50$],
     [$4.1$ \ $7.4$ \ $bold(13.2)$],
     [$17.8 plus.minus 6.3$\ $18.0 plus.minus 6.4$\ $bold(15.4 plus.minus 6.7)$],
@@ -626,11 +613,11 @@ $
 
 === 结果分析
 
-如@tbl:experiment-result 所示，两种传感器-机械臂配置据能从本文提出的运动生成方法中收益。与 KDL-Tree 和多项式插值相比，我们的方法产生了更准确、更光滑的机器人运动，在通过底层透传的低延迟方式控制机器人运动的 Aubo i5 机械臂上，不满足加速度限制的轨迹由于机械臂严重谐振而执行失败，尽管基于多目标优化的逆解方法比 KDL-Tree 运动学逆解消耗了更多时间 ($tilde 50$ms)。与 Moveit2 TRAC-IK 方案相比，我们的方法大幅降低了离线轨迹规划所需时间，通过设计多个优化目标和充分利用手腕关节，明显减小了机械臂到达目标位置所需的运动幅度，尤其是在折叠毛巾等需要更多手部动作的灵巧任务时，提供了更低的体感延迟，从而提高了执行任务的效率和成功率。在后续策略部署时，我们同样采用了本章节设计的运动生成方法，并取得了良好的效果。
+如@tbl:experiment-result 所示，两种传感器-机械臂配置据能从本文提出的运动生成方法中收益。与 KDL-Tree 和多项式插值相比，我们的方法产生了更准确、更光滑的机器人运动，在通过底层透传的低延迟方式控制机器人运动的 Aubo i5 机械臂上，不满足加速度限制的轨迹由于机械臂严重谐振而执行失败，尽管基于多目标优化的逆解方法比 KDL-Tree 运动学逆解消耗了更多时间 ($tilde 50$ms)。与 MoveIt2 TRAC-IK 方案相比，我们的方法大幅降低了离线轨迹规划所需时间，通过设计多个优化目标和充分利用手腕关节，明显减小了机械臂到达目标位置所需的运动幅度，尤其是在折叠毛巾等需要更多手部动作的灵巧任务时，提供了更低的体感延迟，从而提高了执行任务的效率和成功率。在后续策略部署时，我们同样采用了本章节设计的运动生成方法，并取得了良好的效果。
 
 = 数据采集系统和策略验证
 
-当前，深度学习在自然语言处理（NLP）和计算机视觉（CV）领域的快速发展很大程度上得益于对数据、模型规模和计算资源的系统性扩展研究，这些研究揭示了明确的*尺度定律*（Scaling Laws）@kaplan2020scalinglawsneurallanguage，并推动了模型泛化能力的提升。然而，机器人技术领域尚未建立类似的扩展规律，特别是在机器人操作 (Manipulation) 任务中，由于缺乏在真实世界中的高质量数据@bahl2022humantorobotimitationwild @chi2024universalmanipulationinterfaceinthewild，策略的泛化能力仍然有限，难以适应真实世界中复杂多变的环境和物体。
+当前，深度学习计算机视觉和自然语言处理领域的快速发展很大程度上得益于对数据、模型规模和计算资源的系统性扩展研究，这些研究揭示了明确的*尺度定律*（Scaling Laws）@kaplan2020scalinglawsneurallanguage，并推动了模型泛化能力的提升。然而，机器人技术领域尚未建立类似的扩展规律，特别是在机器人操作 (Manipulation) 任务中，由于缺乏在真实世界中的高质量数据@bahl2022humantorobotimitationwild @chi2024universalmanipulationinterfaceinthewild，策略的泛化能力仍然有限，难以适应真实世界中复杂多变的环境和物体。
 
 一种常见的收集机器人模仿学习数据的方式是通过遥操作 (Teleoperation)，即使用特定设备，通过关节映射或运动学逆解的方式将人类操作员的动作映射到运行中的机器人上，并采集机器人视角的视觉、触觉和关节角度等数据。这一过程中，操作员必须守候在机械臂操作台附近，且仅能通过视觉反馈来调整机器人的动作，因此仍然需要大量的人力来收集数据。对此，有研究人员提出了通用操作接口 (Universal Manipulation Interface, UMI)@chi2024universalmanipulationinterfaceinthewild，通过在可 3D 打印的手持夹爪上安装多种传感器，即可在广泛环境 (in-the-wild) 中采集 6-DoF 末端姿态数据。UMI 凭借其直观的操作方式、便携的硬件设计和较低的组装成本成为一些开源模型@liu2025rdt1bdiffusionfoundationmodel 的选择，但它仍存在一些局限性：
 
@@ -641,19 +628,38 @@ $
 为了解决 UMI 的限制，本研究围绕两个目标设计开发了一个新系统流程：
 
 - *目标1：*通过软件驱动方式，提升数据收集效率和即插即用能力。我们的研究人员改进了 UMI 的硬件配置，使之同时支持安装包括移动设备在内各种相机，并开发了可插入的柔性指尖扩展件，使得手持设备收集的数据可直接应用于机器人。在此基础上，我们是设计了用户友好的操作接口，仅需在*操作者自己的移动设备应用程序*中即可完成收集数据全流程，无须使用线缆或其他计算设备。
-- *目标2：*构建稳健的数据收集生态系统，提升大规模数据采集的可能性。我们在数据采集流程中集成了运动学和视觉算法模块，简化了数据处理，大幅降低了操作者使用成本和数据后处理压力。通过支持末端姿态、执行器状态和关节轨迹等数据，我们的数据集系统致力于支持多样的模仿学习模型或基础模型 (Foundation Model)，包括 Diffusion Policy@chi2024diffusionpolicyvisuomotorpolicy，Action Chunking with Transformers@zhao2023learningfinegrainedbimanualmanipulation 和 $pi_0$ @black2024pi0visionlanguageactionflowmodel。
+- *目标2：*构建稳健的数据收集生态系统，提升大规模数据采集的可能性。我们在数据采集流程中集成了运动学和视觉算法模块，简化了数据处理，大幅降低了操作者使用成本和数据后处理压力。通过支持末端姿态、执行器状态和关节轨迹等数据，我们的数据集系统致力于支持多样的模仿学习模型或基础模型@brohan2023rt1roboticstransformerrealworld @brohan2023rt2visionlanguageactionmodelstransfer (Foundation Model)，包括 Diffusion Policy@chi2024diffusionpolicyvisuomotorpolicy，Action Chunking with Transformers@zhao2023learningfinegrainedbimanualmanipulation 和 $pi_0$ @black2024pi0visionlanguageactionflowmodel。
 
 == 原型设计
 
 === 硬件框架
 
-手持设备采集的演示数据不含关节信息，从而与机械臂的具体形态解耦。然而，这也给模仿学习带来了困难，例如，缺乏足够的视觉上下文信息，动作指令的模糊性，系统内的延迟差异和不充分的策略表示@chi2024universalmanipulationinterfaceinthewild。我们的原型设计 [todo]
+手持设备采集的演示数据不含关节信息，从而与机械臂的具体形态解耦。然而，这也给模仿学习带来了困难，例如，缺乏足够的视觉上下文信息，动作指令的模糊性，系统内的延迟差异和不充分的策略表示@chi2024universalmanipulationinterfaceinthewild。我们的研究人员通过仔细设计轻量化的新型硬件形态来应对这一挑战：
+- *相机扩展件：*为移动设备设计的扩展框架，可通过插拔和旋钮轻松地将手机安装在原始 UMI 夹持器上。其拥有多种尺寸，可安装的 iPhone 包括 6S 到最新的型号。采集完毕后，用户可以快速拆卸该扩展件。
 
-- *指尖扩展件：* [todo]
-- *相机扩展件：* [todo] 可安装的 iPhone 包括 6s 到最新的型号。
-- *鱼眼镜头：*我们研究人员开发的相机扩展件可以安装轻松安装具有 $210^degree$ 视场角的低成本鱼眼镜头，鱼眼镜头在保证视觉中心分辨率的同时在外围视野中压缩信息，并保持了视觉特征的空间连续性。实验表明，单个鱼眼镜头即可为策略提供足够的时空信息，因而可以取代 Diffusion Policy 和 ACT 等模型使用第一视角和第三视角平面相机的组合。
+#figure(
+  image("figures/camera-extension.png", width: 67%),
+  caption: "相机扩展件（绿色 3D 打印原型）",
+  supplement: [图],
+)
 
-*总体设计：*[todo] 我们改进的夹持设备重，尺寸为，其中 3D 打印材料的成本为，鱼眼镜头的成本则为 。
+- *鱼眼镜头：*我们研究人员开发的相机扩展件通过旋拧即可装卸具有 $210^degree$ 视场角的低成本鱼眼镜头，鱼眼镜头在保证视觉中心分辨率的同时在外围视野中压缩信息，并保持了视觉特征的空间连续性。实验表明，单个鱼眼镜头即可为策略提供足够的时空信息，因而可以取代 Diffusion Policy 和 ACT 等模型使用第一视角和第三视角平面相机的组合。
+
+#figure(
+  image("figures/extension-fisheye.png", width: 35%),
+  caption: "鱼眼镜头可安装在主摄处",
+  supplement: [图],
+)
+
+*总体设计：*总体而言，我们改进的夹持设备减少了元件数量，考虑到 iOS 设备的拥有率，具有海量的潜在用户。安装完成后，夹爪重约 650g，完整尺寸约为 $21 times 22 times 26$ cm，其中 3D 打印和组装件物料的成本仅为约 40 元，鱼眼镜头则根据不同型号，其成本在 60 到 90 元之间。除了收集数据与训练，该夹爪也可安装在任意机械臂末端作为推理时的执行器。
+
+#v(1em)
+
+#figure(
+  image("figures/robot-gripper.png", width: 70%),
+  caption: "夹爪-相机配置使得推理时的观测量与手持时保持相似",
+  supplement: [图],
+)
 
 === 软件框架
 
@@ -661,17 +667,32 @@ $
 
 我们为不同功能模式设计了统一的视觉语言，降低操作者的学习门槛。
 
+#v(0.5em)
+
 #figure(
-  image("figures/ui.png", width: 75%),
-  caption: "用户接口设计",
+  image("figures/ui.png", width: 80%),
+  caption: "用户接口原型设计",
   supplement: [图],
 )
 
-[todo]
+#v(0.5em)
 
-- 数据管理
+例如，连接夹爪与 iPhone 后，在应用程序的*数据采集*模式仅需点击右下角录制按键即可开始录制，录制期间位姿、视觉数据将在线处理，再次点击将结束录制并立即存储为数据集规范格式。具体算法流程于后文中介绍。
 
-[todo]
+#v(1em)
+
+#figure(
+  caption: "In-the-wild 数据采集模式示例",
+  supplement: [图],
+)[
+  #box(
+    image("figures/ui-record.png", width: 80%),
+    radius: 12pt,
+    clip: true,
+  )
+]
+
+#v(0.5em)
 
 ==== ARKit 集成和视觉处理
 
@@ -703,19 +724,67 @@ $
   upbold(u) = K upbold(p)_d
 $
 
-我们去畸变测试（如图 [todo]）来验证鱼眼镜头建模的有效性。标定模块同样拥有用户友好的接口设计，用户可通过拍摄若干张标定板图像来计算相机内参和畸变系数，对于同一相机-鱼眼镜头组合，用户只需标定一次。
+我们去畸变测试来验证鱼眼镜头建模的有效性，如@img:calib。标定模块同样拥有用户友好的接口设计，用户可通过拍摄若干张标定板图像来计算相机内参和畸变系数，对于同一相机-鱼眼镜头组合，用户只需标定一次。
+
+#v(1em)
+#figure(
+  grid(
+    columns: (1fr, 1fr),
+    rows: auto,
+    gutter: 3pt,
+    grid.cell(box-img("figures/calib0.png", 90%, 10pt)),
+    grid.cell(box-img("figures/calib1.png", 90%, 10pt)),
+  ),
+  caption: [使用标定参数去畸变前后的图像对比。右图为去畸变后的结果，棋盘格标定板的直线得到了恢复，图像中央部分的高频细节得到了保留。],
+  supplement: [图],
+) <calib>
+#v(1em)
 
 ==== 遥操作模块
 
-基于大规模数据进行预训练的基础模型在迁移到不同机械臂配置时，通常仍然需要少量示例（Few-shot）微调@liu2025rdt1bdiffusionfoundationmodel。为了便利这一迁移过程，我们设计的遥操作模块通过快速标定和传输末端位姿数据流，允许用户手持移动设备运动来直接控制机械臂-夹爪组合，相比 VIVE Tracker 和 Quest 3 等设备，我们的方案明显降低了设备成本，并提升了操作舒适度。
+基于大规模数据进行预训练的基础模型在迁移到不同机械臂配置时，通常仍然需要少量示例（Few-shot）微调@liu2025rdt1bdiffusionfoundationmodel @majumdar2024searchartificialvisualcortex。为了便利这一迁移过程，我们设计的遥操作模块通过快速标定和传输末端位姿数据流，允许用户手持移动设备运动来直接控制机械臂-夹爪组合，相比 VIVE Tracker 和 Quest 3 等设备，我们的方案明显降低了设备成本，并提升了操作舒适度。
 
+#v(1em)
+
+#figure(
+    caption: "遥操作模式示例",
+  supplement: [图],
+)[
+  #box(
+    image("figures/ui-teleop.png", width: 79%),
+    radius: 12pt,
+    stroke: rgb("#252525") + 1.2pt,
+    clip: true,
+  )
+]
+
+#v(0.5em)
+
+==== 数据管理
+
+数据的在线处理和存储对用户而言是透明的，用户无需知道处理流程的细节。为了将来自大量用户的演示数据整合到大型数据集中，我们的研究人员开发了中心化数据服务器，用户可在右上角的上传队列中一键将新录制的数据包上传到中心服务器，大幅减轻了操作者和训练人员的数据管理负担。
+
+#v(1em)
+
+#figure(
+    caption: "数据管理器示例",
+  supplement: [图],
+)[
+  #box(
+    image("figures/ui-upload.png", width: 79%),
+    radius: 12pt,
+    stroke: rgb("#252525") + 0.8pt,
+    clip: true,
+  )
+]
+#v(0.5em)
 == 数据采集流程
 
 与依赖复杂 SLAM 算法的原始 UMI 系统不同，我们使用集成 ARKit 的跟踪功能获取观察 (Observation) 和动作 (Action) 数据流，无需事先采集视频来建立场景地图。
 
 - *图像数据、夹爪动作：*安装联合镜头的相机以 $1920 times 1440$ 分辨率和 30帧每秒捕捉鱼眼图像，提供广泛的视觉信息。原始图像数据拥有较高的分辨率，考虑到数据存储和传输的效率，以及策略模型图像编码器实际使用的输入尺寸，我们的应用程序首先将图像缩放至 $640 times 480$ 分辨率，并使用 MPEG-4 编码格式存储。用户可调节设置以选择录制图像格式，最高可选择 $1920 times 1440$ 分辨率和 60 帧每秒的帧率。在送入视频编码器前，应用程序会使用相机标定参数，识别和计算得到图像中基准标记的三维坐标，并标准化到 $0$-$1$ 范围内，从而得到与图像同步的夹爪动作信息。
 - *深度图数据：*iPhone 12 Pro 以上机型拥有 LiDAR 传感器，其位于后置摄像头附近，ARKit 可通过该传感器提供 $256 times 192 space "@" space 30 "fps"$ 的深度图数据。我们使用 16bit 位深的 PNG 格式存储深度图数据，这是考虑到原始数据分辨率较低，而视频编码格式尽管压缩率较高，但1）其采用的帧间预测（Inter-frame Prediction）不符合自然深度图像的运动规律，如遮挡或新物体出现导致的深度突变；2）有损压缩会丢弃高频信息，如物体边缘的深度跳变被平滑。实践中，使用 PNG 视频存储相比视频编码格式会使单条数据集体积增加约 $60%$，仍在可接受范围内。
-- *姿态数据、时间戳*：ARKit融合来自AVFoundation的视频图像信息与来自CoreMotion的设备运动传感数据，再借助于CoreML计算机图像处理与机器学习技术，可实时估计相机的 6-DoF 姿态信息，并以稳定频率更新。由于上述数据来自同一 ARKit 数据帧，因此实现了天然的数据流同步，无需专门测量传感器延迟或在后处理阶段同部数据。
+- *姿态数据、时间戳*：ARKit使用了苹果开发多重运动传感和图像处理库，可实时估计相机的 6-DoF 姿态信息，并以稳定频率更新。由于上述数据来自同一 ARKit 数据帧，因此实现了天然的数据流同步，无需专门测量传感器延迟或在后处理阶段同部数据。
 
 最终，数据收集的步骤如下：
 
@@ -730,10 +799,11 @@ $
 === 数据类型概述
 
 #figure(
-  image("figures/policy.png", width: 100%),
+  image("figures/policy.png", width: 105%),
   caption: "改进的扩散策略（Chunked Diffusion Policy）强化了观察表示，并引入动作分块和平滑策略，以建模演示数据中的非马尔可夫行为。",
   supplement: [图],
 ) <policy>
+#v(1em)
 
 *绝对关节轨迹 (Absolute Joint Trajectory) *指机械臂各个关节的角度读数序列。Diffusion Policy 和 ACT 的原始实现中使用绝对关节轨迹作为策略模型的输入。这种数据类型受限于特定的机械臂，但在预训练模型迁移时，可帮助策略模型快速适应新的机械臂配置。
 
@@ -886,11 +956,27 @@ $
 
 在两台设备上运行的应用程序均能以合理的资源使用率运行全部功能，其中 iPhone 12 Pro 因需要处理 LiDAR 数据，资源占用率更高。 综合上述情况，在现有设计之下，我们推荐使用 iPhone 12 Pro 及以上含 LiDAR 传感器的机型作为稳健、有效的超广角（FOV $approx 210^degree$）数据采集设备。ARKit 支持的最早机型包括 iPhone 6S，此类机型可直接使用后置相机（FOV $approx 78^degree$）作为视觉传感器。
 
-== 采集效率
+=== 采集效率
 
-== 策略模型验证
+使用我们的扩展件设计，用户可以在 30 秒内拼装完成并开始收集演示数据或遥操作数据。对于简单任务，如放置任务（Pick and place），用户录制轨迹数据的间隔平均仅为 10 秒，连续录制期间只需要点击按钮和移动夹持器两种操作，其速度远快于基于 VR 的遥操作（$approx 30$ 秒 / 轨迹）和基于示教器遥控的遥操作（$approx 110$ 秒 / 轨迹）。我们改进的移动端遥操作也提升了收集绝对关节轨迹数据的效率，平均 15 秒 / 轨迹。对于`叠放物块`等复杂任务，本系统收集高质量数据的速度也比遥操作方式快 4 倍以上。在采集验证策略的数据集时我们的实验人员仅花费不到 20 分钟就录制了 50 条有效的 Pick-and-place 轨迹数据。
 
-为验证我们的数据收集策略和改进模型的有效性，我们将上述系统应用于不同操作任务以评估这一系统是否有助于强化机器人策略的泛化能力。我们的实验包括`摆放插头或杯子`、`折叠毛巾`和`安放鞋子`。在`摆放插头`任务中，机器人需要将贴有图标的充电插头放入一个白色圆圈中，但每次重置环境时我们会随机改变插头和圆圈的位置。`折叠毛巾`的任务与第三章的实验相同，即将两次折叠的毛巾再次对折。在`安放鞋子`任务中，两只鞋子将被随机放在初始位置，鞋盒则固定在桌面特定位置，任务目标是将鞋子朝左放入鞋盒中。第一只成功摆放的鞋子可获得 30 分，第二只成功摆放的鞋子可获得 70 分。对于每个任务，我们使用录制系统收集了两种环境下的数据，包括有特定字符标记的黑色桌面和有反光性的机械臂工作台，环境布置如 [todo] 所示每种环境包含 50 条录制的相对末端姿态数据和 20 条遥操作数据。对于不支持末端姿态数据的基线模型，我们使用逆解将相对末端姿态数据转换为关节数据。为评估策略能否在少量样本中学习，我们逐渐增加样本数据和环境并评估训练的策略。录制数据过程中，我们通过切换任务环境和调整操作物的初始位姿来丰富数据的多样性（例如，直立或旋转插头来让机械臂必须调整夹爪的朝向才能完成任务）。尽管实验任务配置尚较为简单，实验结果仍然验证了我们高效采集数据的有效性以及数据多样性对策略执行任务能力的影响。
+=== 策略模型验证
+
+为验证我们的数据收集策略和改进模型的有效性，我们将上述系统应用于不同操作任务以评估这一系统是否有助于强化机器人策略的泛化能力。我们的实验包括`摆放插头或杯子`、`折叠毛巾`和`安放鞋子`。在`摆放插头`任务中，机器人需要将贴有图标的充电插头放入一个白色圆圈中，但每次重置环境时我们会随机改变插头和圆圈的位置。`折叠毛巾`的任务与第三章的实验相同，即将两次折叠的毛巾再次对折。在`安放鞋子`任务中，两只鞋子将被随机放在初始位置，鞋盒则固定在桌面特定位置，任务目标是将鞋子朝左放入鞋盒中。第一只成功摆放的鞋子可获得 30 分，第二只成功摆放的鞋子可获得 70 分。对于每个任务，我们使用录制系统收集了两种环境下的数据，包括有特定字符标记的黑色桌面和有反光性的机械臂工作台，环境布置如@env 所示。每种环境包含 50 条录制的相对末端姿态数据和 20 条遥操作数据。对于不支持末端姿态数据的基线模型，我们使用逆解将相对末端姿态数据转换为关节数据。为评估策略能否在少量样本中学习，我们逐渐增加样本数据和环境并评估训练的策略。录制数据过程中，我们通过切换任务环境和调整操作物的初始位姿来丰富数据的多样性（例如，直立或旋转插头来让机械臂必须调整夹爪的朝向才能完成任务）。尽管实验任务配置尚较为简单，实验结果仍然验证了我们高效采集数据的有效性以及数据多样性对策略执行任务能力的影响。本节的训练和推理均在 Intel Core i9-14900K 3.2GHz, 64GB RAM 和单张 RTX 4090 GPU 的 Ubuntu 22.04 LTS 系统上进行。
+
+#figure(
+  grid(
+    columns: (1fr, 1fr),
+    rows: auto,
+    gutter: 3pt,
+    grid.cell(box-img("figures/workspace1.png", 80%, 12pt)),
+    grid.cell(box-img("figures/workspace2.png", 80%, 12pt)),
+  ),
+  caption: [任务环境配置],
+  supplement: [图],
+) <env>
+
+#v(1em)
 
 #figure(
   grid(
@@ -902,13 +988,27 @@ $
     grid.cell(image("figures/videoframe3.png", width: 100%)),
     grid.cell(image("figures/videoframe4.png", width: 100%)),
   ),
-  caption: "摆放插头任务示例",
+  caption: "摆放插头任务示意图",
   supplement: [图],
 )
 
-[todo] 叠毛巾
+#v(1em)
 
-[todo] 双臂摆放鞋子
+#figure(
+  grid(
+    columns: (1fr, 1fr, 1fr, 1fr),
+    rows: auto,
+    gutter: 3pt,
+    grid.cell(image("figures/video2.jpg", width: 100%)),
+    grid.cell(image("figures/video2-1.jpg", width: 100%)),
+    grid.cell(image("figures/video2-2.jpg", width: 100%)),
+    grid.cell(image("figures/video2-3.jpg", width: 100%)),
+  ),
+  caption: "安放鞋子任务示意图",
+  supplement: [图],
+)
+
+#v(1em)
 
 #figure(
   caption: [实验结果],
@@ -932,6 +1032,8 @@ $
   )
 ] <res2>
 
+#v(1em)
+
 #figure(
   grid(
     columns: (1fr, 1fr),
@@ -944,7 +1046,13 @@ $
   supplement: [图],
 )
 
+#v(1em)
+
+实验表明，通过单个超广角相机配置，基线实现和我们的改进实现均能获取足够的视觉信息来完成任务，省去了原始策略使用多个相机的复杂安装和标定过程。
+
 为了验证改进模块中深度信息编码模块的有效性，我们在 SAPIEN 仿真环境中使用 D435 相机获取点云数据，将其合并到策略模型的观察中。
+
+#v(1em)
 
 #figure(
   caption: [实验结果],
@@ -958,7 +1066,7 @@ $
     align: center + horizon,
     inset: (y: 0.8em),
     stroke: (_, y) => if y > 0 { (top: 0.8pt) },
-    table.header[执行器][方法][摆放杯子\ （成功率%）][摆放杯子\ （时间/s）][安放鞋子\ （成功率%）][安放鞋子\ （时间/s）],
+    table.header[执行器][方法][摆放杯子\ （成功率%）][摆放杯子\ （时间/s）][安放鞋子\ （得分）][安放鞋子\ （时间/s）],
     [#rotate(-90deg)[Aloha\ Agilex 1\ D435]],
     [3D Diffusion Policy\ CDP（本文方法）],
     [$bold(96)$ \ $94$],
@@ -968,6 +1076,8 @@ $
   )
 ] <res2>
 
+#v(2em)
+
 #figure(
   grid(
     columns: (1fr, 1fr),
@@ -976,105 +1086,36 @@ $
     grid.cell(image("figures/bench3.png", width: 100%)),
     grid.cell(image("figures/bench4.png", width: 100%)),
   ),
-  caption: [],
+  caption: [我们的点云编码器使模型能够快速学习任务信息，同时保留了 RGB 视觉信息编码，虽然推理时间更长（$~15$ms / step），但在应对处理鞋盒等不规则物体时，能够提供更稳健的环境信息表示。],
   supplement: [图],
 )
 
-
 === 结果分析
 
-
+- *策略有效性：*本文采用的 Chunked Diffusion Policy 在多个仿真和真实世界任务中的平均成功率达 $78.25%$，超过了基线模型，包括扩散策略和 3D-扩散策略。在收敛速度上，CDP 通常在 1000 轮 (epoch) 内收敛，快于扩散策略。在折叠毛巾任务中，CDP 使用较少演示数据即超过了基线模型使用最多演示数据的得分，除了较高的动作精度外，CDP 通过平滑连贯的动作执行，使得机械臂执行轨迹与动作指令一致程度更高，并减少了执行停滞现象。相比 3D-扩散策略，我们的策略通过有效编码视觉信息，在任务稳健性上更具优势。
+- *泛化能力：*在实验中我们发现，通过刻意引入执行失败后复原的动作序列，例如，保留抓取失败或抓取过程中掉落物体的轨迹数据，不仅能够增强模型在执行失败后的复原能力，还能让模型对初始相机姿态和物体位置等配置变化的敏感度有所降低。实验中，使用动作分块的 CDP 模型表现出了明显的纠错能力，即使首次抓取或折叠失败，也能通过后续动作调整姿态，最终提升任务完成率。
+- *数据多样性和数量的影响：*在初期试验后，我们调整了演示数据集结构，使之包含约 $1 / 5$ 的失败-复原轨迹数据，并使物体-环境配置（如初始夹爪姿态、物体形态和位姿等）在所有数据中较均匀地分布。我们提取了数据集的子集继续实验，1）通过在数据集中随机采样 $25% ~ 80%$，保持数据多样性的同时减小数据量。2）仅删除包含失败情况的数据（仅 $20%$），或删除特定姿态范围内的数据，如所有鞋子初始朝右放置的数据。我们发现，仅 $20%$ 的数据多样性缺失即可能导致模型性能显著下降，其影响多倍于数据量减少的影响，如包含 40 条无失败数据的模型训练结果仅与包含 20 条随机数据的模型操作得分接近。
 
 = 全文总结
 
 == 主要结论
 
-本文主要……
+本研究围绕机器人操作（Manipulation）模仿学习中的运动生成与数据采集挑战，设计了一套高自由度、低门槛的机器人运动生成与便携数据采集系统，取得的主要结论如下：
+
+- 成功设计并实现了一种包含多目标优化与在线插值的运动生成方法，从而提升欠驱动或冗余自由度的运动规划效果。通过引入关节空间偏移、任务空间误差等目标函数，我们的方法既能充分利用冗余自由度，又能同时保证运动平滑性。实验验证表明，该方法相比传统方案显著降低了执行延迟（最高 $60%$），提高了任务成功率，在折叠毛巾等任务场景下执行时间可缩短$15% ~ 40%$。
+- 开发了一套基于移动设备的低成本、高效率数据采集系统。该系统易于携带，且能以毫米级精度（$4.5 plus.minus 2.4$mm）捕获末端执行器姿态，且单次数据录制仅需10-15秒，比传统VR遥操作方式提速3-4倍。系统在普通iPhone设备上即可高效运行，提供了在任意地点采集数据的可能性。
+- 提出了改进的Chunked Diffusion Policy策略模型，引入动作分块、时序合并与可选的点云嵌入表示 ，验证实验表明，该模型在摆放插头、折叠毛巾等任务中取得平均78.25%的成功率，超越了基线模型。特别是在面对环境变化和执行失败的情况下，模型表现出更强的纠错能力和泛化能力。
+- 通过实验证明，策略训练中数据的多样性比数据量更为关键。仅20%的数据多样性缺失即可能导致模型性能显著下降，其影响远超数据总量减少的影响。这一发现对大规模机器人数据采集策略具有一定指导意义。
+
+该系统的高泛用特性使其能够在不同机械臂平台间快速迁移，为大规模机器人数据采集和预训练奠定了基础。
 
 == 研究展望
 
-更深入的研究……
-
-== 公式格式
-
-// 公式的引用请以 eqt 开头
-我要引用 @eqt:equation。
-
-$ 1 / mu nabla^2 Alpha - j omega sigma Alpha - nabla(1 / mu) times (nabla times Alpha) + J_0 = 0 $<equation>
-
-== 图表格式
-
-
-
-#figure(
-  [
-    #figure(
-      image(
-        "figures/energy-distribution.png",
-        width: 70%,
-      ),
-      gap: 0.3em,
-      kind: "image",
-      supplement: [图],
-      caption: [内热源沿径向的分布], // 中文图例
-    )<image> // 图的引用添加在此处
-  ],
-  gap: 1em,
-  kind: "image-en",
-  supplement: [Figure],
-  caption: [Energy distribution along radial], // 英文图例，本科生模板直接删除即可
-)
-#v(1em)
-
-// 图的引用请以 img 开头
-如 @img:image 所示，......
-
-// 表的引用请以 tbl 开头
-我们来看 @tbl:table，
-
-// 因为涉及续表，所以表的实现比较复杂且不易抽象成函数
-#let xubiao = state("xubiao")
-#figure(
-  figure(
-    table(
-      // 每列比例
-      columns: (25%, 25%, 25%, 25%),
-      table.header(
-        table.cell(
-          // 列数
-          colspan: 4,
-          {
-            context if xubiao.get() {
-              align(left)[*续@tbl:table*] // 请一定要在末尾给表添加标签(如<table>)，并在此处修改引用
-            } else {
-              v(-0.6em)
-              xubiao.update(true)
-            }
-          },
-        ),
-        table.hline(),
-        // 表头部分
-        [感应频率 #linebreak() (kHz)],
-        [感应发生器功率 #linebreak() (%×80kW)],
-        [工件移动速度 #linebreak() (mm/min)],
-        [感应圈与零件间隙 #linebreak() (mm)],
-        table.hline(stroke: 0.5pt),
-      ),
-      // 表格内容
-      ..for i in range(15) {
-        ([250], [88], [5900], [1.65])
-      },
-      table.hline(),
-    ),
-    kind: "table-en",
-    supplement: [Table],
-    caption: [XXXXXXX], // 英文表例，本科生模板直接删除
-  ),
-  gap: 1em,
-  kind: "table",
-  supplement: [表],
-  caption: [高频感应加热的基本参数], // 中文表例
-)<table> // 表的引用添加在此处
+本研究开发的数据采集系统仍存在若干局限，未来研究可从以下几个方面入手改进：
+- 当前的运动生成方法需要在传感器和机械臂端进行较多的手工适配工作，如记录初始末端执行器位姿、适配不同机械臂的控制器API、修改代码来调整优化目标等。未来研究将致力于设计统一的运动生成API接口，实现中间适配层的自动化配置，使不同机械臂和传感器设备之间能够实现"即插即用"。实践上，我们将探索使用流行机器人框架的插件架构、声明式配置文件或跨平台中间件，降低系统部署和迁移的技术门槛。
+- 便携数据收集系统目前仍对用户手机机型有一定限制，理想效果只能在iPhone 12 Pro及以上带有LiDAR的机型上完全复现。我们考虑了以下改进方向：1）在数据流中嵌入基于标定内参的图像修正算法，解决鱼眼镜头带来的视觉里程计失效问题；2）以原生语言编写替代SLAM方案，构建跨平台采集软件，实现真正的"人人均可零成本采集数据"；3）目前硬件扩展件和前端界面仍在快速迭代，我们的目标是使其更加轻量化、更用户友好。
+- 当前策略模型中采用的ResNet18在处理全图上下文关系方面存在局限，对视觉干扰的敏感度较高，限制了模型泛化到训练数据之外场景的能力。针对这一问题，未来研究将沿着两个方向展开：一方面，探索在大规模视觉-语言模型（VLM）基础上微调，使模型能够理解任务语义并生成相应的机器人控制动作；另一方面，将策略模型与大型多模态基础模型相结合，通过迁移学习增强策略对环境变化和干扰的适应能力，实现对新任务的零样本或少样本学习。
+- 基于本研究开发的低成本采集系统，我们计划构建一个大规模的机器人操作预训练数据集，涵盖多种机器人平台、多样化任务和环境。我们希望新的数据集能够推动机器人操作领域的扩展规律（Scaling Laws for Robot Manipulation @lin2025datascalinglawsimitation）和泛化能力来源的研究。
 
 // 参考文献
 #bib(
@@ -1103,19 +1144,20 @@ $ 1 / mu nabla^2 Alpha - j omega sigma Alpha - nabla(1 / mu) times (nabla times 
 
 #if doctype == "bachelor" [
   #achievement(
-    papers: (
-      "Chen H, Chan C T. Acoustic cloaking in three dimensions using acoustic metamaterials[J]. Applied Physics Letters, 2007, 91:183518.",
-      "Chen H, Wu B I, Zhang B, et al. Electromagnetic Wave Interactions with a Metamaterial Cloak[J]. Physical Review Letters, 2007, 99(6):63903.",
-    ),
-    patents: ("第一发明人, 永动机[P], 专利申请号202510149890.0.",),
   )
 
   #acknowledgement[
-    致谢主要感谢导师和对论文工作有直接贡献和帮助的人士和单位。致谢言语应谦虚诚恳，实事求是。
+本论文的顺利完成离不开众多师长和同窗的悉心指导和无私帮助。衷心感谢我的导师卢策吾教授在我的研究过程中给予极大的支持和耐心，卢老师严谨的治学态度、深厚的学术素养以及对细节的极致追求，令我受益匪浅，使我得以顺利克服重重困难，最终完成这次毕业设计。
+
+同时，感谢给予我重要支持和专业指导的薛寒学长、陈文迪学长。他们在理论和技术层面为我指点迷津，拓宽了我的专业视野，提升了实践能力。我刚来元知研究所的时候，他们通过小项目让我快速熟悉机器人领域的研究，包容和指正我的不足之处，点燃了我对 Manipulation 领域的兴趣，回首仍是一段美好时光。我还要感谢唐屠天学长、蒋伟学长对我的悉心指导和鼎力支持。感谢与我度过前面这一段科研时光的王毅同学、周方圆同学和永凯哥，和你们一起工作非常快乐，之后我们要继续努力，为解放人类双手贡献一份力。
+
+我要感谢我在RM、ACM 和学业生涯中收获的好朋友谢奕同学、任知行同学、吴毅昕同学等，与你们的友谊给生活带来了无数快乐和积极的色彩，鼓励我克服重重困难，成长为更好的自己。同时感谢学院老师在基础和专业课上的谆谆教诲，我的成长离不开你们的培养和关怀。
+
+最后，特别感谢我的家人和李明珠同学，你们无条件的爱与支持，让我能够心无旁骛地追求自己的科研和生活理想，你们是我最坚实的后盾，是我持续前进的动力。再次向所有在本论文撰写过程中以及我的求学生涯中给予我关心、支持和帮助的师长、同学、朋友和亲人们表示最诚挚的感谢！你们的每一份情谊，都将是我人生中宝贵的财富。
+
   ]
 ] else [
   #acknowledgement[
-    致谢主要感谢导师和对论文工作有直接贡献和帮助的人士和单位。致谢言语应谦虚诚恳，实事求是。
   ]
 
   #achievement(
@@ -1128,5 +1170,15 @@ $ 1 / mu nabla^2 Alpha - j omega sigma Alpha - nabla(1 / mu) times (nabla times 
 ]
 
 #summary-en[
-  HCCI (Homogenous Charge Compression Ignition)combustion has advantages in terms of efficiency and reduced emission. HCCI combustion can not only ensure both the high economic and dynamic quality of the engine, but also efficiently reduce the NOx and smoke emission. Moreover, one of the remarkable characteristics of HCCI combustion is that the ignition and combustion process are controlled by the chemical kinetics, so the HCCI ignition time can vary significantly with the changes of engine configuration parameters and operating conditions......
+This study focuses on the challenges of motion generation and data collection in robot manipulation imitation learning, and designs a high-degree-of-freedom, low-threshold robot motion generation and portable data collection system. The main conclusions are as follows:
+
+A motion generation method including multi-objective optimization and online interpolation is successfully designed and implemented to improve the motion planning effect of underactuated or redundant degrees of freedom. By introducing objective functions such as joint space offset and task space error, our method can fully utilize redundant degrees of freedom while ensuring motion smoothness. Experimental verification shows that this method significantly reduces execution delay (up to $60%$) and improves task success rate compared with traditional solutions. The execution time can be shortened by $15% ~ 40%$ in task scenarios such as folding towels.
+
+A low-cost and high-efficiency data collection system based on mobile devices is developed. The system is easy to carry and can capture the end effector posture with millimeter-level accuracy ($4.5 plus.minus 2.4$mm), and a single data recording takes only 10-15 seconds, which is 3-4 times faster than traditional VR teleoperation. The system can run efficiently on ordinary iPhone devices, providing the possibility of collecting data at any location.
+
+An improved Chunked Diffusion Policy strategy model is proposed, which introduces action chunking, time series merging and optional point cloud embedding representation. Verification experiments show that the model achieves an average success rate of 78.25% in tasks such as placing plugs and folding towels, surpassing the baseline model. Especially in the face of environmental changes and execution failures, the model shows stronger error correction and generalization capabilities.
+
+Experiments have shown that data diversity is more critical than data volume in strategy training. The lack of only 20% of data diversity may lead to a significant decline in model performance, The system's high versatility enables it to be quickly migrated between different robotic arm platforms, laying the foundation for large-scale robot data collection and pre-training.
+, laying the foundation for large-scale robot data collection and pre-training.
 ]
+
