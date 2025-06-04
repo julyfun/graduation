@@ -61,11 +61,11 @@
     "运动生成",
   ),
 )[
-针对当前机器人操作（Manipulation）领域中大规模高质量数据采集困难的痛点，我们实现了一种结合多目标优化与在线插值的运动生成算法，实验表明，该算法使得各种机械臂在数据收集和推理阶段的运动更灵活和流畅，尤其对于高自由度机械臂。第二阶段，我们开发了一套基于移动设备的低成本、高效率数据采集系统，通过集成AR定位、鱼眼相机和扩展件设计，实现了毫米级精度的执行器姿态录制以及显著的采集提速。为验证采集数据的有效性，我们改进的Chunked Diffusion Policy策略模型提升了观测的表示能力和策略执行的平滑程度。研究结果表明，这套新的数据收集系统能够降低机器人操作数据采集的门槛，为规模化数据采集和预训练策略提供了可行路径。
+  针对当前机器人操作（Manipulation）领域中大规模高质量数据采集困难的痛点，我们实现了一种结合多目标优化与在线插值的运动生成算法，实验表明，该算法使得各种机械臂在数据收集和推理阶段的运动更灵活和流畅，尤其对于高自由度机械臂。第二阶段，我们开发了一套基于移动设备的低成本、高效率数据采集系统，通过集成AR定位、鱼眼相机和扩展件设计，实现了毫米级精度的执行器姿态录制以及显著的采集提速。为验证采集数据的有效性，我们改进的Chunked Diffusion Policy策略模型提升了观测的表示能力和策略执行的平滑程度。研究结果表明，这套新的数据收集系统能够降低机器人操作数据采集的门槛，为规模化数据采集和预训练策略提供了可行路径。
 ]
 
 #abstract-en(keywords: ("Data collection", "Diffusion Policy", "Multimodal actions", "Motion generation"))[
-We developed a low-cost, high-efficiency data collection system based on mobile devices. We  first designed a motion generation algorithm combining multi-objective optimization with online interpolation. Experiments demonstrate that this algorithm enables more flexible and smoother motion for various robotic arms during both data collection and inference. In the second stage, by integrating AR positioning, fisheye cameras, and an improved gripper design, our system achieves millimeter-level accuracy in end-effector pose capture while significantly accelerating data collection. The proposed Chunked Diffusion Policy model improves the modeling capability for multimodal actions. The results show that our hardware-software integrated system significantly reduces the barriers and costs of robot manipulation data collection, providing a feasible technical pathway toward advancing robotic dexterity to human-like levels.
+  We developed a low-cost, high-efficiency data collection system based on mobile devices. We first designed a motion generation algorithm combining multi-objective optimization with online interpolation. Experiments demonstrate that this algorithm enables more flexible and smoother motion for various robotic arms during both data collection and inference. In the second stage, by integrating AR positioning, fisheye cameras, and an improved gripper design, our system achieves millimeter-level accuracy in end-effector pose capture while significantly accelerating data collection. The proposed Chunked Diffusion Policy model improves the modeling capability for multimodal actions. The results show that our hardware-software integrated system significantly reduces the barriers and costs of robot manipulation data collection, providing a feasible technical pathway toward advancing robotic dexterity to human-like levels.
 ]
 
 #outline()
@@ -770,7 +770,7 @@ $
 #v(1em)
 
 #figure(
-    caption: "数据管理器示例",
+  caption: "数据管理器示例",
   supplement: [图],
 )[
   #box(
@@ -864,7 +864,7 @@ $
   supplement: [图],
 )
 
-验证定位精度的重要指标之一是重定位精度，即在执行任务时，夹持器从任意位置返回起始位置的位姿偏移。我们将夹持器设备固定于 Flexiv RIZON  4 机械臂末端，并对比软件收集的位姿读数和机械臂正解得到的高精度结果，通过我们研究人员开发的相机扩展件，相机可以轻松固定在机械臂夹持器上。实验中的两台 iPhone 设备系统均为 iOS 17.6。
+验证定位精度的重要指标之一是重定位精度，即在执行任务时，夹持器从任意位置返回起始位置的位姿偏移。我们将夹持器设备固定于 Flexiv RIZON 4 机械臂末端，并对比软件收集的位姿读数和机械臂正解得到的高精度结果，通过我们研究人员开发的相机扩展件，相机可以轻松固定在机械臂夹持器上。实验中的两台 iPhone 设备系统均为 iOS 17.6。
 
 #figure(
   caption: [iPhone 12 Pro 在不同配置下的重定位精度，数值越小精度越高。锚点丢失会导致定位出现跳变，影响数据质量],
@@ -879,21 +879,9 @@ $
     inset: (y: 0.8em),
     stroke: (_, y) => if y > 0 { (top: 0.8pt) },
     table.header[设备][位置精度 (mm)][姿态精度 (deg)][锚点丢失率],
-
-    [iPhone 12 Pro, LiDAR, 鱼眼镜头, IMU],
-    [$4.5 plus.minus 2.4$],
-    [$0.7 plus.minus 0.3$],
-    [2.0%],
-
-    [iPhone 12 Pro, LiDAR, *遮挡镜头*, IMU],
-    [$5.4 plus.minus 4.1$],
-    [$0.7 plus.minus 0.6$],
-    [0%],
-
-    [iPhone 12 Pro, *遮挡 LiDAR*, 鱼眼镜头, IMU],
-    [$126.5 plus.minus 82.7$],
-    [$0.9 plus.minus 0.4$],
-    [15.3%],
+    [iPhone 12 Pro, LiDAR, 鱼眼镜头, IMU], [$4.5 plus.minus 2.4$], [$0.7 plus.minus 0.3$], [2.0%],
+    [iPhone 12 Pro, LiDAR, *遮挡镜头*, IMU], [$5.4 plus.minus 4.1$], [$0.7 plus.minus 0.6$], [0%],
+    [iPhone 12 Pro, *遮挡 LiDAR*, 鱼眼镜头, IMU], [$126.5 plus.minus 82.7$], [$0.9 plus.minus 0.4$], [15.3%],
   )
 ] <pro>
 
@@ -910,21 +898,9 @@ $
     inset: (y: 0.8em),
     stroke: (_, y) => if y > 0 { (top: 0.8pt) },
     table.header[设备][位置精度 (mm)][姿态精度 (deg)][锚点丢失率],
-
-    [iPhone 12 Mini, 后置镜头, IMU],
-    [$3.1 plus.minus 0.8$],
-    [$0.6 plus.minus 0.3$],
-    [0%],
-
-    [iPhone 12 Pro, *遮挡镜头*, IMU],
-    [$31.0 plus.minus 10.5$],
-    [$0.5 plus.minus 0.3$],
-    [0%],
-
-    [iPhone 12 Pro, *鱼眼镜头*, IMU],
-    [$42.8 plus.minus 22.0$],
-    [$0.4 plus.minus 0.1$],
-    [0%],
+    [iPhone 12 Mini, 后置镜头, IMU], [$3.1 plus.minus 0.8$], [$0.6 plus.minus 0.3$], [0%],
+    [iPhone 12 Pro, *遮挡镜头*, IMU], [$31.0 plus.minus 10.5$], [$0.5 plus.minus 0.3$], [0%],
+    [iPhone 12 Pro, *鱼眼镜头*, IMU], [$42.8 plus.minus 22.0$], [$0.4 plus.minus 0.1$], [0%],
   )
 ] <mini>
 
@@ -943,7 +919,6 @@ $
     inset: (y: 0.8em),
     stroke: (_, y) => if y > 0 { (top: 0.8pt) },
     table.header[设备][任务][CPU 占用率（6核）][内存占用][单条数据磁盘占用],
-
     [iPhone 12 Pro],
     [仅启用定位\ 全功能录制 30s 数据],
     [$88% tilde 96%$\ $167% tilde 200%$],
@@ -1027,6 +1002,7 @@ $
     inset: (y: 0.8em),
     stroke: (_, y) => if y > 0 { (top: 0.8pt) },
     table.header[执行器][方法][摆放插头\ （成功率%）][摆放插头\ （时间/s）][折叠毛巾\ （成功率%）][折叠毛巾\ （时间/s）],
+
     [#rotate(-90deg)[Koch1.1\ OV7725 $170^degree$ FOV]],
     [Diffusion Policy\ CDP（本文方法）],
     [$90.0$ \ $bold(93.3)$],
@@ -1147,22 +1123,20 @@ $
 ]
 
 #if doctype == "bachelor" [
-  #achievement(
-  )
+  #achievement()
 
   #acknowledgement[
-本论文的顺利完成离不开众多师长和同窗的悉心指导和无私帮助。衷心感谢我的导师卢策吾教授在我的研究过程中给予极大的支持和耐心，卢老师严谨的治学态度、深厚的学术素养以及对细节的极致追求，令我受益匪浅，使我得以顺利克服重重困难，最终完成这次毕业设计。
+    本论文的顺利完成离不开众多师长和同窗的悉心指导和无私帮助。衷心感谢我的导师卢策吾教授在我的研究过程中给予极大的支持和耐心，卢老师严谨的治学态度、深厚的学术素养以及对细节的极致追求，令我受益匪浅，使我得以顺利克服重重困难，最终完成这次毕业设计。
 
-同时，感谢给予我重要支持和专业指导的薛寒学长、陈文迪学长。他们在理论和技术层面为我指点迷津，拓宽了我的专业视野，提升了实践能力。我刚来元知研究所的时候，他们通过小项目让我快速熟悉机器人领域的研究，包容和指正我的不足之处，点燃了我对 Manipulation 领域的兴趣，回首仍是一段美好时光。我还要感谢唐屠天学长、蒋伟学长对我的悉心指导和鼎力支持。感谢与我度过前面这一段科研时光的王毅同学、周方圆同学和永凯哥，和你们一起工作非常快乐，之后我们要继续努力，为解放人类双手贡献一份力。
+    同时，感谢给予我重要支持和专业指导的薛寒学长、陈文迪学长。他们在理论和技术层面为我指点迷津，拓宽了我的专业视野，提升了实践能力。我刚来元知研究所的时候，他们通过小项目让我快速熟悉机器人领域的研究，包容和指正我的不足之处，点燃了我对 Manipulation 领域的兴趣，回首仍是一段美好时光。我还要感谢唐屠天学长、蒋伟学长对我的悉心指导和鼎力支持。感谢与我度过前面这一段科研时光的王毅同学、周方圆同学和永凯哥，和你们一起工作非常快乐，之后我们要继续努力，为解放人类双手贡献一份力。
 
-我要感谢我在 RM、ACM 和学业生涯中收获的好朋友谢奕同学、任知行同学、吴毅昕同学等，与你们的友谊给生活带来了无数快乐和积极的色彩，成长为更好的自己。同时感谢学院老师在基础和专业课上的谆谆教诲，我的成长离不开你们的培养和关怀。
+    我要感谢我在 RM、ACM 和学业生涯中收获的好朋友谢奕同学、任知行同学、吴毅昕同学等，与你们的友谊给生活带来了无数快乐和积极的色彩，成长为更好的自己。同时感谢学院老师在基础和专业课上的谆谆教诲，我的成长离不开你们的培养和关怀。
 
-最后，特别感谢我的家人和李明珠同学，你们无条件的爱与支持，让我能够专心追求自己的科研和生活理想，你们是我最坚实的后盾，是我持续前进的动力。再次向所有在本论文撰写过程中以及我的求学生涯中给予我关心、支持和帮助的师长、家人、朋友们表示最诚挚的感谢！你们的每一份情谊，都将是我人生中宝贵的财富。
+    最后，特别感谢我的家人和李明珠同学，你们无条件的爱与支持，让我能够专心追求自己的科研和生活理想，你们是我最坚实的后盾，是我持续前进的动力。再次向所有在本论文撰写过程中以及我的求学生涯中给予我关心、支持和帮助的师长、家人、朋友们表示最诚挚的感谢！你们的每一份情谊，都将是我人生中宝贵的财富。
 
   ]
 ] else [
-  #acknowledgement[
-  ]
+  #acknowledgement[ ]
 
   #achievement(
     papers: (
@@ -1174,15 +1148,15 @@ $
 ]
 
 #summary-en[
-This study focuses on the challenges of motion generation and data collection in robot manipulation imitation learning, and designs a high-degree-of-freedom, low-threshold robot motion generation and portable data collection system. The main conclusions are as follows:
+  This study focuses on the challenges of motion generation and data collection in robot manipulation imitation learning, and designs a high-degree-of-freedom, low-threshold robot motion generation and portable data collection system. The main conclusions are as follows:
 
-A motion generation method including multi-objective optimization and online interpolation is successfully designed and implemented to improve the motion planning effect of underactuated or redundant degrees of freedom. By introducing objective functions such as joint space offset and task space error, our method can fully utilize redundant degrees of freedom while ensuring motion smoothness. Experimental verification shows that this method significantly reduces execution delay (up to $60%$) and improves task success rate compared with traditional solutions. The execution time can be shortened by $15% ~ 40%$ in task scenarios such as folding towels.
+  A motion generation method including multi-objective optimization and online interpolation is successfully designed and implemented to improve the motion planning effect of underactuated or redundant degrees of freedom. By introducing objective functions such as joint space offset and task space error, our method can fully utilize redundant degrees of freedom while ensuring motion smoothness. Experimental verification shows that this method significantly reduces execution delay (up to $60%$) and improves task success rate compared with traditional solutions. The execution time can be shortened by $15% ~ 40%$ in task scenarios such as folding towels.
 
-A low-cost and high-efficiency data collection system based on mobile devices is developed. The system is easy to carry and can capture the end effector posture with millimeter-level accuracy ($4.5 plus.minus 2.4$mm), and a single data recording takes only 10-15 seconds, which is 3-4 times faster than traditional VR teleoperation. The system can run efficiently on ordinary iPhone devices, providing the possibility of collecting data at any location.
+  A low-cost and high-efficiency data collection system based on mobile devices is developed. The system is easy to carry and can capture the end effector posture with millimeter-level accuracy ($4.5 plus.minus 2.4$mm), and a single data recording takes only 10-15 seconds, which is 3-4 times faster than traditional VR teleoperation. The system can run efficiently on ordinary iPhone devices, providing the possibility of collecting data at any location.
 
-An improved Chunked Diffusion Policy strategy model is proposed, which introduces action chunking, time series merging and optional point cloud embedding representation. Verification experiments show that the model achieves an average success rate of 78.25% in tasks such as placing plugs and folding towels, surpassing the baseline model. Especially in the face of environmental changes and execution failures, the model shows stronger error correction and generalization capabilities.
+  An improved Chunked Diffusion Policy strategy model is proposed, which introduces action chunking, time series merging and optional point cloud embedding representation. Verification experiments show that the model achieves an average success rate of 78.25% in tasks such as placing plugs and folding towels, surpassing the baseline model. Especially in the face of environmental changes and execution failures, the model shows stronger error correction and generalization capabilities.
 
-Experiments have shown that data diversity is more critical than data volume in strategy training. The lack of only 20% of data diversity may lead to a significant decline in model performance, The system's high versatility enables it to be quickly migrated between different robotic arm platforms, laying the foundation for large-scale robot data collection and pre-training.
-, laying the foundation for large-scale robot data collection and pre-training.
+  Experiments have shown that data diversity is more critical than data volume in strategy training. The lack of only 20% of data diversity may lead to a significant decline in model performance, The system's high versatility enables it to be quickly migrated between different robotic arm platforms, laying the foundation for large-scale robot data collection and pre-training.
+  , laying the foundation for large-scale robot data collection and pre-training.
 ]
 
