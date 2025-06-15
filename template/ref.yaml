@@ -803,3 +803,95 @@ brohan2023rt1roboticstransformerrealworld:
   serial-number:
     arxiv: '2212.06817'
 
+zhaxizhuoma2025alignbotaligningvlmpoweredcustomized:
+  type: misc
+  title: 'AlignBot: Aligning VLM-powered Customized Task Planning with User Reminders Through Fine-Tuning for Household Robots'
+  author:
+  - Zhaxizhuoma, Zhaxizhuoma
+  - Chen, Pengan
+  - Wu, Ziniu
+  - Sun, Jiawei
+  - Wang, Dong
+  - Zhou, Peng
+  - Cao, Nieqing
+  - Ding, Yan
+  - Zhao, Bin
+  - Li, Xuelong
+  date: 2025
+  url: https://arxiv.org/abs/2409.11905
+  serial-number:
+    arxiv: '2409.11905'
+
+levine2016learninghandeyecoordinationrobotic:
+  type: misc
+  title: Learning Hand-Eye Coordination for Robotic Grasping with Deep Learning and Large-Scale Data Collection
+  author:
+  - Levine, Sergey
+  - Pastor, Peter
+  - Krizhevsky, Alex
+  - Quillen, Deirdre
+  date: 2016
+  url: https://arxiv.org/abs/1603.02199
+  serial-number:
+    arxiv: '1603.02199'
+
+cabi2020scalingdatadrivenroboticsreward:
+  type: misc
+  title: Scaling data-driven robotics with reward sketching and batch reinforcement learning
+  author:
+  - Cabi, Serkan
+  - Colmenarejo, Sergio Gómez
+  - Novikov, Alexander
+  - Konyushkova, Ksenia
+  - Reed, Scott
+  - Jeong, Rae
+  - Zolna, Konrad
+  - Aytar, Yusuf
+  - Budden, David
+  - Vecerik, Mel
+  - Sushkov, Oleg
+  - Barker, David
+  - Scholz, Jonathan
+  - Denil, Misha
+  - name: Freitas
+    given-name: Nando
+    prefix: de
+  - Wang, Ziyu
+  date: 2020
+  url: https://arxiv.org/abs/1909.12200
+  serial-number:
+    arxiv: '1909.12200'
+
+wang2023mimicplaylonghorizonimitationlearning:
+  type: misc
+  title: 'MimicPlay: Long-Horizon Imitation Learning by Watching Human Play'
+  author:
+  - Wang, Chen
+  - Fan, Linxi
+  - Sun, Jiankai
+  - Zhang, Ruohan
+  - Fei-Fei, Li
+  - Xu, Danfei
+  - Zhu, Yuke
+  - Anandkumar, Anima
+  date: 2023
+  url: https://arxiv.org/abs/2302.12422
+  serial-number:
+    arxiv: '2302.12422'
+
+zhang2018deepimitationlearningcomplex:
+  type: misc
+  title: Deep Imitation Learning for Complex Manipulation Tasks from Virtual Reality Teleoperation
+  author:
+  - Zhang, Tianhao
+  - McCarthy, Zoe
+  - Jow, Owen
+  - Lee, Dennis
+  - Chen, Xi
+  - Goldberg, Ken
+  - Abbeel, Pieter
+  date: 2018
+  url: https://arxiv.org/abs/1710.04615
+  serial-number:
+    arxiv: '1710.04615'
+
