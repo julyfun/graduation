@@ -39,18 +39,17 @@
   }
 
   linebreak()
-  linebreak()
 
   align(
     right,
     text()[
-      学位论文作者签名：方俊杰 #h(2.6em)
+      学位论文作者签名： #box(image("../template/figures/sign-me.png", height: 24pt))
 
       日期：#h(1em) 2025 年 #h(0.5em) 5 月 #h(0.5em) 7 日 #h(3.9em)
     ],
   )
 
-  v(3em)
+  v(2em)
 
   align(
     center,
@@ -166,13 +165,14 @@
   [（请在以上方框内选择打“$checkmark$”）]
 
   linebreak()
-  linebreak()
 
   columns(2)[
     #align(
       right,
       text()[
-        学位论文作者签名：方俊杰 #h(2.6em)
+        #v(4pt)
+        学位论文作者签名：#box(image("../template/figures/sign-me.png", height: 24pt))
+
 
         日期：#h(1em) 2025 年 #h(0.5em) 5 月 #h(0.5em) 7 日 #h(3.9em)
       ],
@@ -181,7 +181,8 @@
     #align(
       right,
       text()[
-        指导教师签名：#h(8.6em)
+        指导教师签名：#box(image("../template/figures/sign-prof.png", height: 28pt))
+
 
         日期：#h(1em) 2025 年 #h(0.5em) 5 月 #h(0.5em) 7 日 #h(3.9em)
       ],
